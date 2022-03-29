@@ -1,0 +1,3 @@
+[submodule "imvec"]
+	path = imvec
+	url = https://github.com/froyo-np/imvec.git

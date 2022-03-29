@@ -13,10 +13,34 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\primatives">
+      <UniqueIdentifier>{65b0e6b2-e803-4961-9ef3-37ed4a85df54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\operators">
+      <UniqueIdentifier>{19d32cb8-90aa-403f-aea6-4e6064c189a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imvec.ixx">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdfBox.ixx">
+      <Filter>Header Files\primatives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdfSphere.ixx">
+      <Filter>Header Files\primatives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdfTorus.ixx">
+      <Filter>Header Files\primatives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdfCone.ixx">
+      <Filter>Header Files\primatives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdfIntersect.ixx">
+      <Filter>Header Files\operators</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

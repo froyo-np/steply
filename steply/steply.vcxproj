@@ -56,6 +56,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
+    <Import Project="..\imvec_sub\imvec_sub.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -88,6 +89,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,6 +106,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,6 +123,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +140,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +153,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\imvec.ixx" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\sdfBox.ixx" />
+    <ClCompile Include="src\sdfCone.ixx" />
+    <ClCompile Include="src\sdfIntersect.ixx" />
+    <ClCompile Include="src\sdfSphere.ixx" />
+    <ClCompile Include="src\sdfTorus.ixx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

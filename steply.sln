@@ -5,7 +5,13 @@ VisualStudioVersion = 17.2.32210.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "steply", "steply\steply.vcxproj", "{3E2EB17D-2B33-4F09-A57C-25BD015AC7DD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imvec_sub", "imvec_sub\imvec_sub.vcxitems", "{20C66F9B-5301-4C65-980A-64EA5FED76AE}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		imvec_sub\imvec_sub.vcxitems*{20c66f9b-5301-4c65-980a-64ea5fed76ae}*SharedItemsImports = 9
+		imvec_sub\imvec_sub.vcxitems*{3e2eb17d-2b33-4f09-a57c-25bd015ac7dd}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
