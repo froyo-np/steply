@@ -1,15 +1,16 @@
 module;
 #define max(a,b) a > b ? a : b
+#define abs(a) a >= 0 ? a : -a
 export module sdfIntersect;
 import imvec;
 
 export namespace SDF {
 		template <typename F>
-		struct Intersect {
+		struct intersect {
 			// intentionally empty!
 		};
 		template <typename F>
-		inline F sdfBinaryOp(const Intersect<F>& i, F a, F b) {
+		inline F sdfBinaryOp(const intersect<F>& i, F a, F b) {
 			return max(a, b);
 		}
 		template <typename F>

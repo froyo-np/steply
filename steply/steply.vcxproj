@@ -157,8 +157,11 @@
     <ClCompile Include="src\sdfBox.ixx" />
     <ClCompile Include="src\sdfCone.ixx" />
     <ClCompile Include="src\sdfIntersect.ixx" />
+    <ClCompile Include="src\sdflib.ixx" />
     <ClCompile Include="src\sdfSphere.ixx" />
+    <ClCompile Include="src\sdfSubtract.ixx" />
     <ClCompile Include="src\sdfTorus.ixx" />
+    <ClCompile Include="src\sdfUnion.ixx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

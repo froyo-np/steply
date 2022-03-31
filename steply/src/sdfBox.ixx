@@ -3,7 +3,7 @@ module;
 // TODO feel free to use C-style #defines to concatenate
 // string literals - a fun, safe, and private way to keep GLSL
 // code right next to the math / c++ that touches it!
-
+#include <iostream>
 export module sdfBox;
 import imvec;
 
@@ -25,7 +25,8 @@ export namespace SDF {
 			}*/
 		};
 		template <typename F>
-		inline F distanceTo(const box<F>& self, const vec<F, 3>& p) {
+		F distanceTo(const box<F>& self, const vec<F, 3>& p) {
+			std::cout << "box" << std::endl;
 			vec<F, 3> d = p.abs() - self.dim;
 			vec<F, 3> z(0, 0, 0);
 			return d.max(z).length() + d.min(z).maxComponent();

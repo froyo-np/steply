@@ -18,7 +18,7 @@ export namespace SDF {
 			}*/
 		};
 		template <typename F>
-		inline F distanceTo(const cone<F>& self, const vec<F, 3>& p) {
+		F distanceTo(const cone<F>& self, const vec<F, 3>& p) {
 			vec<F, 3> a = vec<F, 3>(0, -self.height, 0);
 			vec<F, 3> b = vec<F, 3>(0, 0, 0);
 			vec<F, 3> ab = b;

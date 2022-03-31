@@ -5,12 +5,13 @@ export module sdfUnion;
 import imvec;
 
 export namespace SDF {
+	// 'union' is of course a keyword - blerg
 	template <typename F>
-	struct Union {
+	struct union_sdf {
 		// intentionally empty!
 	};
 	template <typename F>
-	inline F sdfBinaryOp(const Union<F>& i, F a, F b) {
+	inline F sdfBinaryOp(const union_sdf<F>& i, F a, F b) {
 		return min(a, b);
 	}
 	template <typename F>
@@ -21,9 +22,9 @@ export namespace SDF {
 
 	};
 	template <typename F>
-	inline F sdfBinaryOp(const smoothUnion<F>& i, F d1, F d2) {
+	inline F sdfBinaryOp(const smoothUnion<F>& i, F a, F b) {
 		F r = i.radius;
-		vec<F, 2> u = vec<F, 2>(max<F>(0, r - a), max<F>(0, r - b));
+		ivec::vec<F, 2> u = ivec::vec<F, 2>(max(0, r - a), max(0, r - b));
 		return max(r, min(a, b)) - u.length();
 	}
 }

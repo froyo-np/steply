@@ -1,16 +1,17 @@
 module;
 #define max(a,b) a > b ? a : b
 #define min(a,b) a < b ? a : b
+#define abs(v) v >= 0 ? v : -v
 export module sdfSubtract;
 import imvec;
 
 export namespace SDF {
 	template <typename F>
-	struct Subtract {
+	struct subtract {
 		// intentionally empty!
 	};
 	template <typename F>
-	inline F sdfBinaryOp(const Subtract<F>& i, F a, F b) {
+	inline F sdfBinaryOp(const subtract<F>& i, F a, F b) {
 		return max(a, -b);
 	}
 	template <typename F>
@@ -21,7 +22,7 @@ export namespace SDF {
 
 	};
 	template <typename F>
-	inline F sdfBinaryOp(const smoothSubtract<F>& i, F d1, F d2) {
+	inline F sdfBinaryOp(const smoothSubtract<F>& i, F a, F b) {
 		F k = i.radius;
 		F h = max(k - abs(-b - a), 0.0);
 		return max(-b, a) + h * h * 0.25 / k;

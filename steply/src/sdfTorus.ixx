@@ -1,4 +1,5 @@
 module;
+#include <iostream>
 export module sdfTorus;
 
 import imvec;
@@ -16,7 +17,8 @@ export namespace SDF {
 			}*/
 		};
 		template <typename F>
-		inline F distanceTo(const torus<F>& self, const vec<F, 3>& p) {
+		F distanceTo(const torus<F>& self, const vec<F, 3>& p) {
+			std::cout << "delete me" << std::endl;
 			F x = p.xz().length() - self.radius;
 			vec<F, 2> s(x, p.y());
 			return s.length() - self.thickness;
