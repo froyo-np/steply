@@ -21,7 +21,7 @@ int main() {
 	SDF::SDFLIB<float> LIB;
 	auto SS = LIB.BinOp<SDF::union_sdf<float>>({}, LIB.Cone(c), LIB.Box(b));
 	std::cout <<"yay magic " << SS->getDistance(test) << std::endl;		
-	*/
+	
 	using sdf = SDF::Node<float>;
 	auto innerBin = SDF::binOp<float>(SDF::union_sdf<float>(), sdf(SDF::box<float>(test)), sdf(SDF::box<float>(test)));
 	auto u = sdf(SDF::binOp<float>(SDF::union_sdf<float>(), sdf(SDF::box<float>(test)), sdf(SDF::box<float>(test))));
@@ -37,4 +37,10 @@ int main() {
 
 	}
 	std::cout << "yay double magic" << std::endl;
+	*/
+	SDF::sdfLib<float> lib;
+	auto b = lib.Shape(SDF::box(test));
+	std::cout << "yaya" << SDF::distanceTo<float>(b, test);
+	auto u = lib.BinOp(SDF::union_sdf<float>({}), SDF::box(test), SDF::cone(0.5f, 1.0f));
+	std::cout << "yay: " << SDF::visitDistance(u, test);
 };

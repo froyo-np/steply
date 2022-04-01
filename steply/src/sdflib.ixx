@@ -4,6 +4,8 @@ module;
 #include <vector>
 export module sdflib;
 import imvec;
+
+// prims
 export import sdfBox;
 export import sdfCone;
 export import sdfSphere;
@@ -14,130 +16,10 @@ export import sdfIntersect;
 export import sdfSubtract;
 export import sdfUnion;
 
-// so, the concept of a primative is anything where the following free function exists:
-// distanceTo(const sdf_primative_type& s, const ivec::vec<F,3>& p) => F
-
-// the concept of a binary SDF operator:
-// sdfBinaryOp(const sdf_binary_op_type& self, F a, F b) => F
-
-// we want to compose sdf ops and primitives into trees, and that
-// tree should be distanceTo(tree, p) able
-
-// so... having an interface, from which the templated implementation hangs
-// is how I've done this before.
-// in the type erased world... we should go a step further...
-/*
-class sdfObj {
-private:
-class sdfConcept {}
-class sdfModel<T> {}
-public:
-std::unique_ptr<sdfConcept> pImpl;
-};
-
-// I'm still struggling with what hiding this in a private class wrapper gets us...
-// why not just pass concepts around?
-// I guess so we can use a bridge pattern?
-
-
-*/
-export namespace SDF {
-	/**
-	template <typename F>
-	class sdfConcept {
-	public:
-		// TODO: is this really type erasure? 
-		// I dont want to clog this with other junk, UI, tree-traversal, etc...
-		// how do I separate those out of the interface...?
-		virtual F getDistance(const ivec::vec<F, 3>& p) const = 0;
-		virtual ~sdfConcept() = default;
-	};
-	template <typename P, typename F>
-	class sdfPrim : public sdfConcept<F> {
-		std::shared_ptr<P> sdf_prim;
-	public:
-		sdfPrim(P p) : sdf_prim(std::make_shared<P>(p)) {}
-		F getDistance(const ivec::vec<F, 3>& p) const override {
-			const P& me = *sdf_prim;
-			return distanceTo(me, p);
-		}
-	};
-
-	template <typename P, typename F>
-	class sdfBinOp : public sdfConcept<F> {
-		std::shared_ptr<P> sdf_self;
-		std::shared_ptr<sdfConcept<F>> lhs, rhs;
-	public:
-		sdfBinOp(P p, std::shared_ptr<sdfConcept<F>> LHS, std::shared_ptr<sdfConcept<F>> RHS) : sdf_self(std::make_shared<P>(p)), lhs(LHS), rhs(RHS) {}
-		F getDistance(const ivec::vec<F, 3>& p) const override {
-			const P& me = *sdf_self;
-			F a = lhs->getDistance(p);
-			F b = rhs->getDistance(p);
-			return sdfBinaryOp(me, a, b);
-		}
-	};
-
-	template <typename F>
-	class SDFLIB {
-	public:
-		SDFLIB() = default;
-		template <typename Bop>
-		std::shared_ptr<sdfConcept<F>> BinOp(const Bop& op, std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			return std::make_shared<sdfBinOp<Bop, F>>(op, lhs, rhs);
-		}
-		std::shared_ptr<sdfConcept<F>> Union(std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			union_sdf<F> fake = {};
-			return BinOp(fake, lhs, rhs);
-		}
-		std::shared_ptr<sdfConcept<F>> Union(const smoothUnion<F>& su, std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			return BinOp(su, lhs, rhs);
-		}
-		std::shared_ptr<sdfConcept<F>> Union(F r, std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			smoothUnion<F>& su(r);
-			return BinOp(su, lhs, rhs);
-		}
-
-		std::shared_ptr<sdfConcept<F>> Intersect(std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			intersect<F> fake = {};
-			return BinOp(fake, lhs, rhs);
-		}
-		std::shared_ptr<sdfConcept<F>> Intersect(const smoothIntersect<F>& su, std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			return BinOp(su, lhs, rhs);
-		}
-		std::shared_ptr<sdfConcept<F>> Intersect(F r, std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			smoothIntersect<F>& su(r);
-			return BinOp(su, lhs, rhs);
-		}
-
-		std::shared_ptr<sdfConcept<F>> Subtract(std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			subtract<F> fake = {};
-			return BinOp(fake, lhs, rhs);
-		}
-		std::shared_ptr<sdfConcept<F>> Subtract(const smoothSubtract<F>& su, std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			return BinOp(su, lhs, rhs);
-		}
-		std::shared_ptr<sdfConcept<F>> Subtract(F r, std::shared_ptr<sdfConcept<F>> lhs, std::shared_ptr<sdfConcept<F>> rhs) {
-			smoothSubtract<F>& su(r);
-			return BinOp(su, lhs, rhs);
-		}
-		template <typename P>
-		std::shared_ptr<sdfConcept<F>> Prim(const P& p) {
-			return std::make_shared<sdfPrim<P, F>>(p);
-		}
-		std::shared_ptr<sdfConcept<F>> Box(const box<F>& b) {
-			return Prim(b);
-		}
-		std::shared_ptr<sdfConcept<F>> Cone(const cone<F>& c) {
-			return Prim(c);
-		}
-		std::shared_ptr<sdfConcept<F>> Torus(const torus<F>& t) {
-			return Prim(t);
-		}
-		std::shared_ptr<sdfConcept<F>> Sphere(const sphere<F>&s) {
-			return Prim(s);
-		}
-	};
-	**/
+namespace SDF {
+	// note: we only export the free functions,
+	// the Node class, and the helper lib class
+	
 	// I have a few competing goals
 	// 1. it seems like its a good idea to separate the tree-ness
 	// from the math-ness. this is however problematic, because a thing that represents a union, or intersection,
@@ -171,6 +53,7 @@ export namespace SDF {
 	concept PrimOpAble = requires(P v, ivec::vec<F, 3> pnt) {
 		distanceTo(v, pnt);
 	};
+
 	// likewise, the conceptual requirement of being able to call sdfBinaryOp on it
 	template <typename P, typename F>
 	concept BinOpAble = requires(P v, F a, F b) {
@@ -178,19 +61,19 @@ export namespace SDF {
 	};
 	template <class ...Ts> struct VisitorCases : Ts... {using Ts::operator()...; };
 	
-	template <typename F>
+	export template <typename F>
 	struct Node; // forward decl
 
 	template <typename F>
-	struct binOp {
+	class binOp {
+	private:
 		binOpVariant<F> op;
 		// because of heap-allocation and allocator-something-something, we can have a container
 		// of incomplete types declared!
 		std::vector<Node<F>> children;
-		explicit binOp(binOpVariant<F>&& Op, Node<F>&& lhs, Node<F>&& rhs) : op(Op), children({ std::move(lhs), std::move(rhs) }) {}
-		// friend free function injected into surrounding namespace...
-		// thus a binOp should satisfy the PrimOpAble Concept requirement
 		friend F distanceTo(const binOp<F>& self, const ivec::vec<F, 3>& p);
+	public:
+		explicit binOp(binOpVariant<F>&& Op, Node<F>&& lhs, Node<F>&& rhs) : op(Op), children({ std::move(lhs), std::move(rhs) }) {}
 	};
 	
 	template <typename F>
@@ -202,7 +85,7 @@ export namespace SDF {
 	};
 
 	// arbitrary nodes distance function!
-	template <typename F>
+	export template <typename F>
 	F distanceTo(const Node<F>& self, const ivec::vec<F, 3>& p) {
 		return std::visit( // primOpVariant, binOp
 			[&p](const auto& arg) {return distanceTo<F>(arg, p); },
@@ -210,7 +93,7 @@ export namespace SDF {
 		);
 	}
 	// the binOp version  - note I am a friend of the class, hence I may touch the insides
-	template <typename F>
+	export template <typename F>
 	F distanceTo(const binOp<F>& self, const ivec::vec<F, 3>& p) {
 		F a = distanceTo<F>(self.children[0], p);
 		F b = distanceTo<F>(self.children[1], p);
@@ -218,18 +101,41 @@ export namespace SDF {
 			[a, b](const auto& arg) {return sdfBinaryOp<F>(arg, a, b); }, self.op);
 	}
 	// the primitive-op variant distanceTo fn
-	template <typename F>
+	export template <typename F>
 	F distanceTo(const primOpVariant<F>& prim, const ivec::vec<F,3>& pnt) {
 		return std::visit( // obviously, all types of primitive are handled here, and the compiler generates all the versions of this... somehow!
 			[&pnt](const auto& unwrapped) {return SDF::distanceTo<F>(unwrapped, pnt); }
 		, prim);
 	}
-	
-
-	template <typename P, typename F>
+	export template <typename P, typename F>
 	requires PrimOpAble<P, F>
 	F visitDistance(const P& self, const ivec::vec<F, 3>& p) {
-		return std::visit(
-			[&p](const auto& arg) { return distanceTo<F>(arg, p); }, self);
+		return distanceTo<F>(self, p);
 	}
+
+	export template <typename F>
+	class sdfLib {
+	public:
+		inline Node<F> Shape(primOpVariant<F>&& prim) {
+			// c++17 copy elision - aka its safe to return like this
+			return Node<F>(std::move(prim));
+		}
+		inline Node<F> BinOp(binOpVariant<F>&& op, Node<F>&& lhs, Node<F>&& rhs) {
+			// c++17 copy elision - aka its safe to return like this
+			return Node<F>(binOp<F>(std::move(op), std::move(lhs), std::move(rhs)));
+		}
+		inline Node<F> BinOp(binOpVariant<F>&& op, primOpVariant<F>&& lhs, Node<F>&& rhs) {
+			// c++17 copy elision - aka its safe to return like this
+			return Node<F>(binOp<F>(std::move(op), Shape(std::move(lhs)), std::move(rhs)));
+		}
+		inline Node<F> BinOp(binOpVariant<F>&& op, Node<F>&& lhs, primOpVariant<F>&& rhs) {
+			// c++17 copy elision - aka its safe to return like this
+			return Node<F>(binOp<F>(std::move(op), std::move(lhs), Shape(std::move(rhs))));
+		}
+		inline Node<F> BinOp(binOpVariant<F>&& op, primOpVariant<F>&& lhs, primOpVariant<F>&& rhs) {
+			// c++17 copy elision - aka its safe to return like this
+			return Node<F>(binOp<F>(std::move(op), Shape(std::move(lhs)), Shape(std::move(rhs))));
+		}
+	};
+	
 };
