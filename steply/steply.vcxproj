@@ -152,8 +152,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="move.ixx" />
+    <ClCompile Include="src\AbstractNode.ixx" />
+    <ClCompile Include="src\distanceVisitor.ixx" />
     <ClCompile Include="src\imvec.ixx" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\round.ixx" />
     <ClCompile Include="src\sdfBox.ixx" />
     <ClCompile Include="src\sdfCone.ixx" />
     <ClCompile Include="src\sdfIntersect.ixx" />

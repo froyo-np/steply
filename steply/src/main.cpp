@@ -1,5 +1,5 @@
 import imvec;
-
+import distanceVisitor;
 import sdflib;
 #include <vector>
 #include <iostream>
@@ -39,8 +39,8 @@ int main() {
 	std::cout << "yay double magic" << std::endl;
 	*/
 	SDF::sdfLib<float> lib;
-	auto b = lib.Shape(SDF::box(test));
+	auto b = SDF::box<float>{ test };
 	std::cout << "yaya" << SDF::distanceTo<float>(b, test);
-	auto u = lib.BinOp(SDF::union_sdf<float>({}), SDF::box(test), SDF::cone(0.5f, 1.0f));
-	std::cout << "yay: " << SDF::visitDistance(u, test);
+	auto u = lib.transform(SDF::move<float>{test}, lib.modify(SDF::round<float>(0.1f), lib.join(SDF::union_sdf<float>({}), SDF::box<float>{test}, SDF::cone(0.5f, 1.0f))));
+	std::cout << "yay: " << SDF::visitDistance<float>(u, test);
 };

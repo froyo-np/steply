@@ -19,6 +19,9 @@
     <Filter Include="Header Files\operators">
       <UniqueIdentifier>{19d32cb8-90aa-403f-aea6-4e6064c189a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\visitors">
+      <UniqueIdentifier>{984fa5da-9f0d-4406-9618-88127c4b6232}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imvec.ixx">
@@ -50,6 +53,18 @@
     </ClCompile>
     <ClCompile Include="src\sdflib.ixx">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\distanceVisitor.ixx">
+      <Filter>Header Files\visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AbstractNode.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\round.ixx">
+      <Filter>Header Files\operators</Filter>
+    </ClCompile>
+    <ClCompile Include="move.ixx">
+      <Filter>Header Files\operators</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
