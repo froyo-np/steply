@@ -5,7 +5,6 @@ module;
 // code right next to the math / c++ that touches it!
 export module sdfBox;
 import imvec;
-
 /// the SDF of a 3D box ///
 
 // all SDF things, in this case a primitive,

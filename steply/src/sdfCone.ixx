@@ -4,7 +4,6 @@ module;
 export module sdfCone;
 
 import imvec;
-
 export namespace SDF {
 	using namespace ivec;
 		template <typename F>

@@ -1,60 +1,47 @@
 module;
 #include <variant>
 export module distanceVisitor;
-import sdflib;
 import imvec;
+import sdfNode;
 
 namespace SDF {
+	// a distance visitor must:
+	// define a visit fn for all variants of node-type
+	// visitors may be free functions, or they may be objects
+	// that get passed around. NO RULES!
+	// note that since the class of nodes in a specific use case of this library isn't defined
+	// until the user defines it - adding node-classes to the tree-group type will require you to write a
+	// visitor for that type
 
-	export template <typename F>
-	F visitDistance(const LeafOrNode<F>& self, const ivec::vec<F, 3>& p);
-	template <typename F>
-	F distanceTo(const BinOp<F>& self, const ivec::vec<F, 3>& p);
-	template <typename F>
-	F distanceTo(const UnaryOp<F>& self, const ivec::vec<F, 3>& p);
-	template <typename F>
-	F distanceTo(const NodeVariants<F>& self, const ivec::vec<F, 3>& p);
-	template <typename F>
-	F distanceTo(const primOpVariant<F>& prim, const ivec::vec<F, 3>& pnt);
-	/// Implementations to follow ///
-
-	template <typename F>
-	F distanceTo(const BinOp<F>& self, const ivec::vec<F, 3>& p) {
-		F a = visitDistance<F>(self.getLhs(), p);
-		F b = visitDistance<F>(self.getRhs(), p);
+	export template<typename F, typename GroupType>
+	F visitDistance(const typename GroupType::BinaryOp& node, const ivec::vec<F, 3>& p) {
+		// visit children first
+		F a = visitDistance<F, GroupType>(node.getLhs(), p);
+		F b = visitDistance<F, GroupType>(node.getRhs(), p);
 		return std::visit( // all 6 types of binOp can be deduced!
-			[a, b](const auto& arg) {return sdfBinaryOp<F>(arg, a, b); }, self.getPayload());
+			[a, b](const auto& arg) {return sdfBinaryOp<F>(arg, a, b); }, node.getPayload());
 	}
-	template <typename F>
-	F distanceTo(const UnaryOp<F>& self, const ivec::vec<F, 3>& p) {
-		F childDst = visitDistance<F>(self.getChild(), p);
+	export template<typename F, typename GroupType>
+	F visitDistance(const typename GroupType::Shape& node, const ivec::vec<F, 3>& p) {
+		return std::visit( // all 6 types of binOp can be deduced!
+			[&p](const auto& arg) {return distanceTo<F>(arg, p); }, node.getPayload());
+	}
+	export template<typename F, typename GroupType>
+		F visitDistance(const typename GroupType::UnaryOp& node, const ivec::vec<F, 3>& p) {
+		F childDst = visitDistance<F,GroupType>(node.getChild(), p);
 		return std::visit(
-			[childDst](const auto& arg) {return sdfUnaryOp<F>(arg, childDst); }, self.getPayload());
+			[childDst](const auto& arg) {return sdfUnaryOp<F>(arg, childDst); }, node.getPayload());
+	}
+	export template<typename F, typename GroupType>
+		F visitDistance(const typename GroupType::DomainOp& node, const ivec::vec<F, 3>& p) {
+		ivec::vec<F, 3> pnt = std::visit(
+			[p](const auto& arg) {return sdfDomainOp<F>(arg, p); }, node.getPayload());
+		return visitDistance<F, GroupType>(node.getChild(), pnt);
 	}
 
-	template <typename F>
-	F distanceTo(const DomainOp<F>& self, const ivec::vec<F, 3>& p) {
-		ivec::vec<F,3> pnt = std::visit(
-			[p](const auto& arg) {return sdfDomainOp<F>(arg, p); }, self.getPayload());
-		return visitDistance<F>(self.getChild(), pnt);
-	}
-
-	template <typename F>
-	F distanceTo(const NodeVariants<F>& self, const ivec::vec<F, 3>& p) {
-		return std::visit( // BinOps, UnaryOps, DomainOps
-			[&p](const auto& arg) {return distanceTo<F>(arg, p); }, self);
-	}
-
-	// the primitive-op variant distanceTo fn
-	template <typename F>
-	F distanceTo(const primOpVariant<F>& prim, const ivec::vec<F, 3>& pnt) {
-		return std::visit( // box, sphere, torus, etc...
-			[&pnt](const auto& unwrapped) {return SDF::distanceTo<F>(unwrapped, pnt); }
-		, prim);
-	}
-	template <typename F>
-	F visitDistance(const LeafOrNode<F>& self, const ivec::vec<F, 3>& p) {
-		return std::visit( // leaves, nodes
-			[&p](const auto& arg) {return distanceTo<F>(arg, p); }, self);
+	export template<typename F, typename GroupType>
+	F visitDistance(const typename GroupType::NodeVariant& node, const ivec::vec<F, 3>& p) {
+		return std::visit(
+			[&p](const auto& arg) {return visitDistance<F, GroupType>(arg, p); }, node);
 	}
 };

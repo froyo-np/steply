@@ -63,8 +63,11 @@
     <ClCompile Include="src\round.ixx">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
-    <ClCompile Include="move.ixx">
+    <ClCompile Include="src\move.ixx">
       <Filter>Header Files\operators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdfNode.ixx">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
