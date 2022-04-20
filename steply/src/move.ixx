@@ -15,4 +15,5 @@ export namespace SDF {
 	inline ivec::vec<F, 3> sdfDomainOp(const move<F>& trn, const ivec::vec<F, 3>& pnt) {
 		return trn.offset + pnt;
 	}
+
 };

@@ -47,6 +47,7 @@ namespace SDF {
 		LeafOp<L>, 
 		OtherNodeClasses...> {
 		public:
+			// variants of payload, per node-class
 			using binVaraints = B;
 			using unaryVariants = U;
 			using domainVariants = D;

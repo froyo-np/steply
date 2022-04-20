@@ -69,5 +69,17 @@
     <ClCompile Include="src\sdfNode.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\sdfCapsule.ixx">
+      <Filter>Header Files\primatives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdfCylinder.ixx">
+      <Filter>Header Files\primatives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdfHexPrism.ixx">
+      <Filter>Header Files\primatives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\repeat.ixx">
+      <Filter>Header Files\operators</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
