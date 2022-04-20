@@ -81,5 +81,8 @@
     <ClCompile Include="src\repeat.ixx">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
+    <ClCompile Include="imguiVisitor.ixx">
+      <Filter>Header Files\visitors</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

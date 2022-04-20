@@ -1,3 +1,6 @@
 [submodule "imvec"]
 	path = imvec
 	url = https://github.com/froyo-np/imvec.git
+[submodule "imgui"]
+	path = imgui
+	url = https://github.com/ocornut/imgui.git

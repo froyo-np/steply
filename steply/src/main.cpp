@@ -1,5 +1,6 @@
 import imvec;
 import distanceVisitor;
+import imguiVisitor;
 import sdflib;
 import sdfNode;
 #include <vector>
@@ -17,6 +18,7 @@ int main() {
 	vec<float, 3> test(1,2,3);
 	std::cerr << (test*test).y() << std::endl;
 
-	
+	auto hey = sdflib::Union(sdflib::Box(test), sdflib::Box(test));
+	SDF::guiVisit<float, sdfNode>(hey);
 	std::cerr << visitDistance<float, sdfNode>(sdflib::Union(sdflib::Box(test), sdflib::Box(test)), test);
 };

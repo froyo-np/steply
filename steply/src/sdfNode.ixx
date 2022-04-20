@@ -11,6 +11,8 @@ namespace SDF {
 		public:
 			inline const typename GroupType::NodeVariant& getLhs() const { return children[0]; }
 			inline const typename GroupType::NodeVariant& getRhs() const { return children[1]; }
+			inline typename GroupType::NodeVariant& getLhs() { return children[0]; }
+			inline typename GroupType::NodeVariant& getRhs() { return children[1]; }
 			template <typename V>
 			explicit BinOp(V&& v, typename GroupType::NodeVariant&& lhs, typename GroupType::NodeVariant&& rhs) : Nodes::Node<P>(std::move(v)), children({ lhs,rhs }) {}
 	};
@@ -22,6 +24,7 @@ namespace SDF {
 			template <typename V>
 			explicit UnOp(V&& v, typename GroupType::NodeVariant&& subTree) : Nodes::Node<P>(std::move(v)), child({ subTree }) {}
 			inline const typename GroupType::NodeVariant& getChild() const { return child[0]; }
+			inline typename GroupType::NodeVariant& getChild() { return child[0]; }
 	};
 	export template <class P, class GroupType>
 		class DomOp : public Nodes::Node<P> {
@@ -31,6 +34,7 @@ namespace SDF {
 			template <typename V>
 			explicit DomOp(V&& v, typename GroupType::NodeVariant&& subTree) : Nodes::Node<P>(std::move(v)), child({ subTree }) {}
 			inline const typename GroupType::NodeVariant& getChild() const { return child[0]; }
+			inline typename GroupType::NodeVariant& getChild() { return child[0]; }
 	};
 	export template <class P>
 		class LeafOp : public Nodes::Node<P> {
