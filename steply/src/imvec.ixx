@@ -2,6 +2,7 @@ module;
 // the below .hpp is not "visible" (todo: is this technically true?) from importers, because this is the 
 // so-called 'global module fragment'
 #include <imvec/imvec.hpp>
+#include <imvec/mat.hpp>
 // thus, what we are doing here is creating a module wrapper around the vanilla .hpp include
 export module imvec;
 /**/
@@ -12,7 +13,15 @@ export namespace ivec {
 	// from our importer! success!
 	template<class T, unsigned short N>
 	using vec = imvec::vec<T, N>;
+
+	template<class T, unsigned short N>
+	using mat = imvec::mat<T, N>;
+	
+	using imvec::rotateAboutAxis4;
+
+
 };
+
 /****/
 
 // the above version would work, and its nice to hide things in namespaces
