@@ -1,8 +1,10 @@
 module;
 #define min(a, b) a < b ? a : b
 #define max(a, b) a > b ? a : b
+#define UI_NAME "hex prism"
+#include "guiDef.h"
 export module sdfHexPrism;
-
+import AbstractEditor;
 import imvec;
 export namespace SDF {
 	using namespace ivec;
@@ -28,5 +30,16 @@ export namespace SDF {
 			p.z() - h.y());
 
 		return min(max(d.x(), d.y()), 0.0f) + vec2::Max(d, vec2(0, 0)).length();
+	}
+	decl_uiName(hexPrism, UI_NAME);
+
+	template <typename F>
+	hexPrism<F> Edit(const hexPrism<F>& obj, IEditor<F>* editor, bool* changed) {
+		auto r = editor->EditPositive("radius", obj.radius, changed);
+		auto h = editor->EditPositive("height", obj.height, changed);
+		if (changed) {
+			return { r,h };
+		}
+		return obj;
 	}
 }

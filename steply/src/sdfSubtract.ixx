@@ -2,9 +2,10 @@ module;
 #define max(a,b) a > b ? a : b
 #define min(a,b) a < b ? a : b
 #define abs(v) v >= 0 ? v : -v
+#include "guiDef.h"
 export module sdfSubtract;
 import imvec;
-
+import AbstractEditor;
 export namespace SDF {
 	template <typename F>
 	struct subtract {
@@ -26,5 +27,20 @@ export namespace SDF {
 		F k = i.radius;
 		F h = max(k - abs(-b - a), 0.0);
 		return max(-b, a) + h * h * 0.25 / k;
+	}
+	decl_uiName(subtract, "subtract");
+	decl_uiName(smoothSubtract, "smooth subtract");
+
+	template <typename F>
+		subtract<F> Edit(const subtract<F>& obj, IEditor<F>* editor, bool* changed) {
+		return obj;
+	}
+	template <typename F>
+	smoothSubtract<F> Edit(const smoothSubtract<F>& obj, IEditor<F>* editor, bool* changed) {
+		auto r = editor->EditPositive("radius", obj.radius, changed);
+		if (changed) {
+			return { r };
+		}
+		return obj;
 	}
 }

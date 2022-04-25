@@ -23,6 +23,7 @@ namespace Nodes {
 		Node(V&& v) : payload(std::move(v)) {}
 	public:
 		inline Var getPayload() const { return payload; }
+		inline void setPayload(Var p) { payload = p; }
 		// TODO is it possible to make a boilerplate visitor?
 
 

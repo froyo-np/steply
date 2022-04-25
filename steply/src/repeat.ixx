@@ -1,9 +1,10 @@
 module;
-
+#define UI_NAME "repeat"
+#include "guiDef.h"
 export module repeat;
 import imvec;
 
-
+import AbstractEditor;
 export namespace SDF {
 	using namespace ivec;
 	template <typename F>
@@ -22,6 +23,16 @@ export namespace SDF {
 		vec3 k = p - c * vec3::Min(vec3::Max((p / c).round(), l * -1.0), l);
 		return k;
 	}
+	decl_uiName(repeat, UI_NAME);
 
+	template <typename F>
+	repeat<F> Edit(const repeat<F>& obj, IEditor<F>* editor, bool* changed) {
+		auto reps = editor->EditPositive("steps", obj.reps, changed);
+		auto size = editor->EditPositive("step size", obj.stepSize, changed);
+		if (changed) {
+			return { reps, size };
+		}
+		return obj;
+	}
 };
 

@@ -1,7 +1,9 @@
 
 #include <Windows.h>
 #include <gl/GL.h>
-
+#include "glext.h"
+#include "wglext.h"
+#include "OGL.h";
 /// IM gui
 #include <imgui.h>
 #include <imgui_impl_win32.h>
@@ -125,6 +127,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static HGLRC hglRC;
 	static int screenWidth;
 	static int screenHeight;
+	static bool showGUI = true;
 	// mouse garbage: delete me please!
 	static ivec2 lastMousePosScreenPx(0,0);
 	static bool lDown = false;
@@ -134,6 +137,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static float frametime = 0.0;
 	static mat<float, 4> mdl;
 	static std::string clipboard;
+	static auto objectThing = sdflib::Union(sdflib::Box(fvec3(0.5,0.5,0.5)), sdflib::Move(fvec3(0.5,0,0), sdflib::Sphere(0.6)));
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
 	{
 		return true;
@@ -148,7 +152,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_KEYUP:
 	{
-		
+		switch ((UINT)wParam)
+		{
+		case 'G':
+			showGUI = !showGUI;
+			break;
+		}
 	}
 	case WM_CREATE:
 	{
@@ -158,11 +167,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PIXELFORMATDESCRIPTOR pfd = getPreferredPixelFormatDescriptor();
 		int pixform = ChoosePixelFormat(hdc, &pfd);
 		SetPixelFormat(hdc, pixform, &pfd);
-		/**
+		/**/
 		int attribs[] = { WGL_CONTEXT_MAJOR_VERSION_ARB, 3, WGL_CONTEXT_MINOR_VERSION_ARB, 3, WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB, 0, 0 };
-		HGLRC hRC = OGL::getContext(hdc, attribs);
+		HGLRC hRC = getContext(hdc, attribs);
 		if (hRC) {
-			if (!OGL::bind(hdc)) {
+			if (!bindRequiredExtensions(hdc)) {
 				// this set of required extensions failed - load a different fallback set?
 				// TODO
 				// for now, just die
@@ -176,7 +185,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			PostQuitMessage(0);
 		}
 		std::cout << "GL initialization complete..." << std::endl;
-		const GLubyte* str = OGL::GetString(GL_VERSION);
+		const GLubyte* str = glGetString(GL_VERSION);
 		std::cout << "OGL reports version: " << str << std::endl;
 
 		// IM GUI //
@@ -184,7 +193,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ImGui_ImplWin32_Init(hWnd);
 		ImGui_ImplOpenGL3_Init("#version 130");
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		*/
+		/**/
+
+		// some random OGL state:
+		glClearColor(0, 0, 0, 0);
 	}
 	break;
 	case WM_MOUSEWHEEL:
@@ -234,16 +246,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// IMGUI //
-		if (false) { // TODO
-			//ImGui_ImplOpenGL3_NewFrame();
-			//ImGui_ImplWin32_NewFrame();
+		if (showGUI) {
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
 			// draw the gui
-			
+			guiVisit<float,sdfNode>(objectThing);
 			ImGui::Render();
-			//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
 
 
