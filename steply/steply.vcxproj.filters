@@ -87,9 +87,6 @@
     <ClCompile Include="src\OGL.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\AbstractEditor.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\glext.h">

@@ -3,7 +3,7 @@ module;
 #include "guiDef.h"
 export module move;
 import imvec;
-import AbstractEditor;
+
 
 export namespace SDF {
 
@@ -18,12 +18,5 @@ export namespace SDF {
 	}
 	decl_uiName(move, UI_NAME);
 
-	template <typename F>
-	move<F> Edit(const move<F>& obj, IEditor<F>* editor, bool* changed) {
-		auto pos = editor->Edit("offset", obj.offset, changed);
-		if (changed) {
-			return { pos};
-		}
-		return obj;
-	}
+	
 };

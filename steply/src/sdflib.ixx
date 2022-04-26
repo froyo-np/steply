@@ -2,6 +2,7 @@ module;
 #include <memory>
 #include <variant>
 #include <vector>
+#include <array>
 export module sdflib;
 import imvec;
 import sdfNode;
@@ -25,6 +26,7 @@ namespace SDF {
 
 	export template <typename F, typename... UserDefinedBinOpPayloads>
 	using binOpVariant = std::variant<union_sdf<F>, smoothUnion<F>, intersect<F>, smoothIntersect<F>, subtract<F>, smoothSubtract<F>, UserDefinedBinOpPayloads...>;
+	
 
 	export template <typename F, typename... MoreUnaryOpPayloads>
 	using unaryOpVariant = std::variant<round<F>, MoreUnaryOpPayloads...>;
@@ -33,7 +35,7 @@ namespace SDF {
 	using domainOpVariant = std::variant<move<F>, ExtraDomainOpPayloads...>;
 
 	export template <typename F, typename... EvenMoreSDFShapes>
-	using shapeVariant = std::variant<cone<F>, box<F>, torus<F>, sphere<F>, EvenMoreSDFShapes...>;
+	using shapeVariant = std::variant<cone<F>, box<F>, torus<F>, sphere<F>,capsule<F>,hexPrism<F>,cylinder<F>, EvenMoreSDFShapes...>;
 
 	// at some point, the user of this library must declare a subclass of sdfTreeNode, so that they can actually implement some of this stuff, and also
 	// have the chance to define their own node types. this does not by them much...

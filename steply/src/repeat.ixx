@@ -4,7 +4,7 @@ module;
 export module repeat;
 import imvec;
 
-import AbstractEditor;
+
 export namespace SDF {
 	using namespace ivec;
 	template <typename F>
@@ -25,14 +25,6 @@ export namespace SDF {
 	}
 	decl_uiName(repeat, UI_NAME);
 
-	template <typename F>
-	repeat<F> Edit(const repeat<F>& obj, IEditor<F>* editor, bool* changed) {
-		auto reps = editor->EditPositive("steps", obj.reps, changed);
-		auto size = editor->EditPositive("step size", obj.stepSize, changed);
-		if (changed) {
-			return { reps, size };
-		}
-		return obj;
-	}
+	
 };
 

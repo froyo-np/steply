@@ -21,11 +21,10 @@ namespace Nodes {
 		Var payload;
 		template <typename V> // todo require V to be assignable to Var
 		Node(V&& v) : payload(std::move(v)) {}
+		
 	public:
 		inline Var getPayload() const { return payload; }
 		inline void setPayload(Var p) { payload = p; }
-		// TODO is it possible to make a boilerplate visitor?
-
-
+		//~Node() = default;
 	};
 };

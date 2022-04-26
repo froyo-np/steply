@@ -4,7 +4,7 @@ module;
 #include "guiDef.h"
 export module sdfUnion;
 import imvec;
-import AbstractEditor;
+
 export namespace SDF {
 	// 'union' is of course a keyword - blerg
 	template <typename F>
@@ -31,16 +31,5 @@ export namespace SDF {
 	decl_uiName(union_sdf, "union");
 	decl_uiName(smoothUnion, "smooth union");
 
-	template <typename F>
-	union_sdf<F> Edit(const union_sdf<F>& obj, IEditor<F>* editor, bool* changed) {
-		return obj;
-	}
-	template <typename F>
-	smoothUnion<F> Edit(const smoothUnion<F>& obj, IEditor<F>* editor, bool* changed) {
-		auto r = editor->EditPositive("radius", obj.radius, changed);
-		if (changed) {
-			return { r };
-		}
-		return obj;
-	}
+	
 }

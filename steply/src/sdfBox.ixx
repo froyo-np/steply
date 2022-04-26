@@ -3,7 +3,7 @@ module;
 #include "guiDef.h"
 export module sdfBox;
 import imvec;
-import AbstractEditor;
+
 export namespace SDF {
 		using namespace ivec;
 		template <typename F>
@@ -20,14 +20,5 @@ export namespace SDF {
 			return d.max(z).length() + d.min(z).maxComponent();
 		}
 		decl_uiName(box,UI_NAME)
-
-		template <typename F>
-		box<F> Edit(const box<F>& obj, IEditor<F>* editor, bool* changed) {
-			auto size= editor->EditPositive("size", obj.dim, changed);
-			if (changed) {
-				return {size };
-			}
-			return obj;
-		}
 
 };

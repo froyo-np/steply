@@ -4,7 +4,7 @@ module;
 #define UI_NAME "capsule"
 #include "guiDef.h"
 export module sdfCapsule;
-import AbstractEditor;
+
 import imvec;
 export namespace SDF {
 	using namespace ivec;
@@ -26,13 +26,5 @@ export namespace SDF {
 	}
 	decl_uiName(capsule, UI_NAME);
 
-	template <typename F>
-	capsule<F> Edit(const capsule<F>& obj, IEditor<F>* editor, bool* changed) {
-		auto a = editor->Edit("a", obj.a, changed);
-		auto b = editor->Edit("b", obj.b, changed);
-		if (changed) {
-			return {a,b };
-		}
-		return obj;
-	}
+	
 }

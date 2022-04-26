@@ -158,7 +158,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="imguiVisitor.ixx" />
-    <ClCompile Include="src\AbstractEditor.ixx" />
     <ClCompile Include="src\AbstractNode.ixx" />
     <ClCompile Include="src\OGL.cpp" />
     <ClCompile Include="src\repeat.ixx" />

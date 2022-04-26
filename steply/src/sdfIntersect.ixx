@@ -4,7 +4,7 @@ module;
 #include "guiDef.h"
 export module sdfIntersect;
 import imvec;
-import AbstractEditor;
+
 
 export namespace SDF {
 		template <typename F>
@@ -31,16 +31,5 @@ export namespace SDF {
 		decl_uiName(intersect, "intersect");
 		decl_uiName(smoothIntersect, "smooth intersect");
 
-		template <typename F>
-		intersect<F> Edit(const intersect<F>& obj, IEditor<F>* editor, bool* changed) {
-			return obj;
-		}
-		template <typename F>
-		smoothIntersect<F> Edit(const smoothIntersect<F>& obj, IEditor<F>* editor, bool* changed) {
-			auto r = editor->EditPositive("radius", obj.radius, changed);
-			if (changed) {
-				return { r };
-			}
-			return obj;
-		}
+		
 }

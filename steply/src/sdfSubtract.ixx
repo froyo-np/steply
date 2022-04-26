@@ -5,7 +5,7 @@ module;
 #include "guiDef.h"
 export module sdfSubtract;
 import imvec;
-import AbstractEditor;
+
 export namespace SDF {
 	template <typename F>
 	struct subtract {
@@ -31,16 +31,5 @@ export namespace SDF {
 	decl_uiName(subtract, "subtract");
 	decl_uiName(smoothSubtract, "smooth subtract");
 
-	template <typename F>
-		subtract<F> Edit(const subtract<F>& obj, IEditor<F>* editor, bool* changed) {
-		return obj;
-	}
-	template <typename F>
-	smoothSubtract<F> Edit(const smoothSubtract<F>& obj, IEditor<F>* editor, bool* changed) {
-		auto r = editor->EditPositive("radius", obj.radius, changed);
-		if (changed) {
-			return { r };
-		}
-		return obj;
-	}
+	
 }

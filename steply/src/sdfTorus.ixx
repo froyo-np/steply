@@ -2,7 +2,7 @@ module;
 #define UI_NAME "torus"
 #include "guiDef.h"
 export module sdfTorus;
-import AbstractEditor;
+
 import imvec;
 
 export namespace SDF {
@@ -23,13 +23,5 @@ export namespace SDF {
 		}
 		decl_uiName(torus, UI_NAME);
 		
-		template <typename F>
-		torus<F> Edit(const torus<F>& obj, IEditor<F>* editor, bool* changed) {
-			auto radius = editor->EditPositive("radius", obj.radius, changed);
-			auto thickness = editor->EditPositive("thickness", obj.thickness, changed);
-			if (changed) {
-				return { radius, thickness};
-			}
-			return obj;
-		}
+		
 };

@@ -4,7 +4,7 @@ module;
 #define UI_NAME "cylinder"
 #include "guiDef.h"
 export module sdfCylinder;
-import AbstractEditor;
+
 import imvec;
 export namespace SDF {
 	using namespace ivec;
@@ -23,13 +23,5 @@ export namespace SDF {
 	}
 	decl_uiName(cylinder, UI_NAME);
 
-	template <typename F>
-	cylinder<F> Edit(const cylinder<F>& obj, IEditor<F>* editor, bool* changed) {
-		auto r = editor->EditPositive("radius", obj.radius, changed);
-		auto h = editor->EditPositive("height", obj.height, changed);
-		if (changed) {
-			return { r,h };
-		}
-		return obj;
-	}
+	
 }

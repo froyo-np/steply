@@ -12,6 +12,7 @@
 #include <thread>
 #include <fstream>
 #include <iostream>
+#include <variant>
 
 import imvec;
 import distanceVisitor;
@@ -137,7 +138,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static float frametime = 0.0;
 	static mat<float, 4> mdl;
 	static std::string clipboard;
-	static auto objectThing = sdflib::Union(sdflib::Box(fvec3(0.5,0.5,0.5)), sdflib::Move(fvec3(0.5,0,0), sdflib::Sphere(0.6)));
+	static sdfNode::NodeVariant objectThing = sdflib::Union(sdflib::Round(0.1,sdflib::Box(fvec3(0.5,0.5,0.5))), sdflib::Move(fvec3(0.5,0,0), sdflib::Sphere(0.6)));
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
 	{
 		return true;
@@ -254,7 +255,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ImGui::NewFrame();
 
 			// draw the gui
-			guiVisit<float,sdfNode>(objectThing);
+			auto result = guiVisit<float,sdfNode>(objectThing);
+			auto nPtr = std::get_if<sdfNode::NodeVariant>(&result);
+			if (nPtr != nullptr) {
+				objectThing = *nPtr;
+			}
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
