@@ -36,13 +36,15 @@ namespace SDF {
 			inline const typename GroupType::NodeVariant& getRhs() const { return children[1]; }
 			inline typename GroupType::NodeVariant& getLhs() { return children[0]; }
 			inline typename GroupType::NodeVariant& getRhs() { return children[1]; }
-
-			inline void setLhs(typename GroupType::NodeVariant node) {
-				children[0] = (node);
+			// puts the node in an invalid state... TODO
+			inline typename GroupType::NodeVariant&& takeLhs() { return std::move(children[0]); }
+			inline typename GroupType::NodeVariant&& takeRhs() { return std::move(children[1]); }
+			inline void setLhs(typename GroupType::NodeVariant&& node) {
+				children[0] = std::move(node);
 			}
 
-			inline void setRhs(typename GroupType::NodeVariant node) {
-				children[1] = (node);
+			inline void setRhs(typename GroupType::NodeVariant&& node) {
+				children[1] = std::move(node);
 			}
 			template <typename V>
 			explicit BinOp(V&& v, typename GroupType::NodeVariant&& lhs, typename GroupType::NodeVariant&& rhs) : Nodes::Node<P>(std::move(v)), children({ lhs,rhs }) {}
@@ -57,8 +59,9 @@ namespace SDF {
 			explicit UnOp(V&& v, typename GroupType::NodeVariant&& subTree) : Nodes::Node<P>(std::move(v)), child({ subTree }) {}
 			inline const typename GroupType::NodeVariant& getChild() const { return child[0]; }
 			inline typename GroupType::NodeVariant& getChild() { return child[0]; }
-			inline void setChild(typename GroupType::NodeVariant node) {
-				child[0] = (node);
+			inline typename GroupType::NodeVariant&& takeChild() { return std::move(child[0]); }
+			inline void setChild(typename GroupType::NodeVariant&& node) {
+				child[0] = std::move(node);
 			}
 			
 	};
@@ -71,8 +74,9 @@ namespace SDF {
 			explicit DomOp(V&& v, typename GroupType::NodeVariant&& subTree) : Nodes::Node<P>(std::move(v)), child({ subTree }) {}
 			inline const typename GroupType::NodeVariant& getChild() const { return child[0]; }
 			inline typename GroupType::NodeVariant& getChild() { return child[0]; }
-			inline void setChild(typename GroupType::NodeVariant node) {
-				child[0] = (node);
+			inline typename GroupType::NodeVariant&& takeChild() { return std::move(child[0]); }
+			inline void setChild(typename GroupType::NodeVariant&& node) {
+				child[0] = std::move(node);
 			}
 			
 	};

@@ -210,6 +210,8 @@ namespace SDF {
 		}, node.getPayload());
 	}
 
+	// add widget //
+
 
 
 	template <typename GroupType>
@@ -226,7 +228,7 @@ namespace SDF {
 			}
 		}
 		else if (nPtr != nullptr) {
-			parent.setChild(*nPtr);
+			parent.setChild(std::move(*nPtr));
 		}
 		return false;
 	}
@@ -242,9 +244,56 @@ namespace SDF {
 			}
 		}
 		else if (nPtr != nullptr) {
-			parent.setChild(*nPtr);
+			parent.setChild(std::move(*nPtr));
 		}
 		return false;
+	}
+
+	template <typename GroupType, typename W>
+	guiResult<GroupType> addUnaryThing(W& parent) {
+		auto uns = GroupType::template getDefaultVariantList<typename GroupType::unaryVariants>();
+		auto doms = GroupType::template getDefaultVariantList<typename GroupType::domainVariants>();
+
+		for (auto unary : uns) {
+			const char* lbl = std::visit([](const auto& arg) {return uiName(arg); }, unary);
+			if (ImGui::MenuItem(lbl)) {
+				// return a new thing - which must take the 
+				//parent.setChild(typename GroupType::UnaryOp(unary, parent.takeChild()));
+				return typename GroupType::UnaryOp(unary, std::move(parent));
+			}
+		}
+		for (auto dom : doms) {
+			const char* lbl = std::visit([](const auto& arg) {return uiName(arg); }, dom);
+			if (ImGui::MenuItem(lbl)) {
+				//parent.setChild(typename GroupType::DomainOp(dom, parent.takeChild()));
+				return typename GroupType::DomainOp(dom, std::move(parent));
+			}
+		}
+	}
+	template <typename GroupType, typename W>
+	guiResult<GroupType> showInsertWidget(W& parent) {
+		guiResult<GroupType> result = false;
+		//ImGui::PushItemWidth(normal_width);
+		if (ImGui::SmallButton("+->")) {
+			ImGui::OpenPopup("Insert");
+		}
+		ImGui::SameLine();
+		if (ImGui::BeginPopup("Insert")) {
+			//ImGui::PushItemWidth(normal_width);
+			//if (ImGui::BeginMenu("New Shape")) {
+			//	// prims... add/sub/intersect --> all prims
+			//	result = AddSubIntMenu(subTree);
+			//	ImGui::EndMenu();
+			//}
+			if (ImGui::BeginMenu("Modifier")) {
+				result = addUnaryThing<GroupType,W>(parent);
+				ImGui::EndMenu();
+			}
+			//ImGui::PopItemWidth();
+			ImGui::EndPopup();
+		}
+		//ImGui::PopItemWidth();
+		return result;
 	}
 	template <typename GroupType>
 	guiResult<GroupType> handleVisitResult(typename GroupType::BinaryOp& parent, guiResult<GroupType>& lhsResult, guiResult<GroupType>& rhsResult) {
@@ -261,7 +310,7 @@ namespace SDF {
 			}
 		}
 		else if (lnPtr != nullptr) {
-			parent.setLhs(*lnPtr);
+			parent.setLhs(std::move(*lnPtr));
 		}
 		// now handle RHS
 		if (rbPtr != nullptr) {
@@ -271,7 +320,7 @@ namespace SDF {
 			}
 		}
 		else if (rnPtr != nullptr) {
-			parent.setRhs(*rnPtr);
+			parent.setRhs(std::move(*rnPtr));
 		}
 		return false;
 	}
@@ -298,6 +347,11 @@ namespace SDF {
 			return true;
 		}
 		ImGui::SameLine();
+		auto insRes = showInsertWidget<GroupType>(node);
+		if (std::get_if<typename GroupType::NodeVariant>(&insRes) != nullptr) {
+			return insRes;
+		}
+		ImGui::SameLine();
 		const char* name = std::visit(
 			[](const auto& arg) {return uiName<F>(arg); }, node.getPayload());
 		if (ImGui::TreeNode(name)) {
@@ -306,17 +360,26 @@ namespace SDF {
 			// show the widget to edit the numeric data of this shape:
 			editPayload<F, typename GroupType::BinaryOp>(node);
 			// visit child(ren)
+			ImGui::PushID("lhs");
 			auto lhsResult = guiVisit<F, GroupType>(node.getLhs());
+			ImGui::PopID();
+			ImGui::PushID("rhs");
 			auto rhsResult = guiVisit<F, GroupType>(node.getRhs());
+			ImGui::PopID();
 			ImGui::TreePop();
-			return handleVisitResult<GroupType>(node, lhsResult,rhsResult);
+			return handleVisitResult<GroupType>(node, lhsResult, rhsResult);
 		}
 		return false;
 	}
 	export template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::UnaryOp& node) {
 		if (ImGui::SmallButton("x")) {
-			return node.getChild();
+			return node.takeChild();
+		}
+		ImGui::SameLine();
+		auto insRes = showInsertWidget<GroupType>(node);
+		if (std::get_if<typename GroupType::NodeVariant>(&insRes) != nullptr) {
+			return insRes;
 		}
 		ImGui::SameLine();
 		const char* name = std::visit(
@@ -335,7 +398,12 @@ namespace SDF {
 	export template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::DomainOp& node) {
 		if (ImGui::SmallButton("x")) {
-			return node.getChild();
+			return node.takeChild();
+		}
+		ImGui::SameLine();
+		guiResult<GroupType> insRes = showInsertWidget<GroupType>(node);
+		if (std::get_if<typename GroupType::NodeVariant>(&insRes)!=nullptr) {
+			return insRes;
 		}
 		ImGui::SameLine();
 		const char* name = std::visit(
@@ -355,6 +423,11 @@ namespace SDF {
 	guiResult<GroupType> guiVisit(typename GroupType::Shape& node) {
 		if (ImGui::SmallButton("x")) {
 			return true;
+		}
+		ImGui::SameLine();
+		auto insRes = showInsertWidget<GroupType>(node);
+		if (std::get_if<typename GroupType::NodeVariant>(&insRes) != nullptr) {
+			return insRes;
 		}
 		ImGui::SameLine();
 		const char* name = std::visit(
