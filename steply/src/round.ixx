@@ -25,6 +25,6 @@ export namespace SDF {
 	decl_glslInterface(round,sName,sDef,fnName,fnDef)
 	export template <typename F>
 	std::string glslLiteral(const round<F>& self) {
-		return print(self);
+		return print(self.radius);
 	}
 }

@@ -39,6 +39,6 @@ export namespace SDF {
 	decl_glslInterface(capsule, SNAME, SDEF, FNAME, FNDEF)
 		export template <typename F>
 		std::string glslLiteral(const capsule<F>& self) {
-		return std::string(SNAME) + "(" + vecLiteral<F, 3>(self.a) +", ",+vecLiteral<F,3>(self.b)+", "+print(self.radius) +")";
+		return std::string(SNAME) + "(" + vecLiteral<F, 3>(self.a) +", "+vecLiteral<F,3>(self.b)+", "+print(self.radius) +")";
 	}
 }

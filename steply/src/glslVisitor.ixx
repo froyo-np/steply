@@ -62,7 +62,7 @@ namespace SDF {
 	};
 	
 	export template <typename F, typename GroupType>
-	class directCallVisitor : public genericVisitor<F, GroupType, glslHeaderVisitor<F, GroupType>> {
+	class glslDirectCallVisitor : public genericVisitor<F, GroupType, glslDirectCallVisitor<F, GroupType>> {
 	protected:
 		std::stack<std::string> subExprStack;
 		std::stack<std::string> pointExprStack;
@@ -93,32 +93,54 @@ namespace SDF {
 		void pushPointExpr(std::string&& str) {
 			pointExprStack.push(str);
 		}
-		template <typename T>
-		std::string literalFor(const T& payload) {
-			return std::visit([](const auto& arg) {return glslLiteral(arg); }, payload);
+		template <typename N>
+		std::string literalFor(const N& node) {
+			return std::visit([](const auto& arg) {return glslLiteral(arg); }, node.getPayload());
 		}
-		
+		template <typename N>
+		std::string getFnName(const N& node) {
+			return std::visit([](const auto& arg) {return glslFnName(arg); }, node.getPayload());
+		}
 	public:
-		void visitUp(const typename GroupType::Shape& node) {
+		glslDirectCallVisitor(std::string pExpr) {
+			pointExprStack.push(pExpr);
+		}
+		std::string getExpr() {
+			return subExprStack.top();
 		}
 		void visitDown(const typename GroupType::Shape& node) {
-			
+			std::string selfValue = literalFor(node);
+			std::string call = getFnName(node) + "(" + (selfValue.size() > 0 ? selfValue + ", " : "") + getPointExpr() + ")";
+			pushExpr(call);
 		}
-
-		void visitUp(const typename GroupType::UnaryOp& node) {
+		void visitUp(const typename GroupType::Shape& node) {
 		}
+		
 		void visitDown(const typename GroupType::UnaryOp& node) {
 		}
-
-		void visitUp(const typename GroupType::DomainOp& node) {
+		void visitUp(const typename GroupType::UnaryOp& node) {
+			std::string selfValue = literalFor(node);
+			std::string call = getFnName(node) + "(" + (selfValue.size() > 0 ? selfValue + ", " : "") + popExpr() + ")";
+			pushExpr(call);
 		}
+		
 		void visitDown(const typename GroupType::DomainOp& node) {
+			std::string selfValue = literalFor(node);
+			std::string call = getFnName(node) + "(" + (selfValue.size() > 0 ? selfValue + ", " : "") + getPointExpr() + ")";
+			pushPointExpr(call);
 		}
-
-		void visitUp(const typename GroupType::BinaryOp& node) {
+		void visitUp(const typename GroupType::DomainOp& node) {
+			popPointExpr();
 		}
+		
 		void visitDown(const typename GroupType::BinaryOp& node) {
-			
+		}
+		void visitUp(const typename GroupType::BinaryOp& node) {
+			auto rExp = popExpr();
+			auto lExp = popExpr();
+			std::string selfValue = literalFor(node);
+			std::string call = getFnName(node) + "(" + (selfValue.size() > 0 ? selfValue + ", " : "") + lExp + ", " + rExp+ ")";
+			pushExpr(call);
 		}
 	};
 };
