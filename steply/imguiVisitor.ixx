@@ -257,18 +257,27 @@ namespace SDF {
 		for (auto unary : uns) {
 			const char* lbl = std::visit([](const auto& arg) {return uiName(arg); }, unary);
 			if (ImGui::MenuItem(lbl)) {
-				// return a new thing - which must take the 
-				//parent.setChild(typename GroupType::UnaryOp(unary, parent.takeChild()));
 				return typename GroupType::UnaryOp(unary, std::move(parent));
 			}
 		}
 		for (auto dom : doms) {
 			const char* lbl = std::visit([](const auto& arg) {return uiName(arg); }, dom);
 			if (ImGui::MenuItem(lbl)) {
-				//parent.setChild(typename GroupType::DomainOp(dom, parent.takeChild()));
 				return typename GroupType::DomainOp(dom, std::move(parent));
 			}
 		}
+	}
+	template <typename GroupType, typename W>
+	guiResult<GroupType> addShape(W& parent) {
+		auto shapes = GroupType::template getDefaultVariantList<typename GroupType::leafVariants>();
+		auto bins = GroupType::template getDefaultVariantList<typename GroupType::binVaraints>();
+		for (auto shape : shapes) {
+			const char* lbl = std::visit([](const auto& arg) {return uiName(arg); }, shape);
+			if (ImGui::MenuItem(lbl)) {
+				return typename GroupType::BinaryOp(bins[0], std::move(parent), typename GroupType::Shape(shape));
+			}
+		}
+
 	}
 	template <typename GroupType, typename W>
 	guiResult<GroupType> showInsertWidget(W& parent) {
@@ -280,11 +289,10 @@ namespace SDF {
 		ImGui::SameLine();
 		if (ImGui::BeginPopup("Insert")) {
 			//ImGui::PushItemWidth(normal_width);
-			//if (ImGui::BeginMenu("New Shape")) {
-			//	// prims... add/sub/intersect --> all prims
-			//	result = AddSubIntMenu(subTree);
-			//	ImGui::EndMenu();
-			//}
+			if (ImGui::BeginMenu("New Shape")) {
+				result = addShape<GroupType, W>(parent);
+				ImGui::EndMenu();
+			}
 			if (ImGui::BeginMenu("Modifier")) {
 				result = addUnaryThing<GroupType,W>(parent);
 				ImGui::EndMenu();
