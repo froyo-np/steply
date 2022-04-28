@@ -14,8 +14,7 @@ namespace SDF {
 	export template <typename F, typename GroupType>
 	class glslHeaderVisitor : public genericVisitor<F, GroupType, glslHeaderVisitor<F,GroupType>> {
 	protected:
-		std::map<std::string, std::string> structDefs;
-		std::map<std::string, std::string> fnDefs;
+		
 
 		void considerStruct(std::string stName, std::string stDef) {
 			if (stName == "empty") {
@@ -40,6 +39,8 @@ namespace SDF {
 			}
 		}
 	public:
+		std::map<std::string, std::string> structDefs;
+		std::map<std::string, std::string> fnDefs;
 		template <typename NodeType>
 		void visitUp(const NodeType& node) {
 			auto me = this;

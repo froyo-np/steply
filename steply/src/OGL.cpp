@@ -32,7 +32,8 @@ bool bindRequiredExtensions(HDC hdc) {
 	const char* allExt = wglGetExtensionsStringARB(hdc);
 	// bind all the others!
 	// TODO we are going to need a bunch of these
-	
+	_gl::bindGL_VERSION_2_0(allExt);
+	_gl::bindGL_VERSION_3_0(allExt);
 	return success;
 }
 

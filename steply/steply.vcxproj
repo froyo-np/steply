@@ -160,9 +160,13 @@
   <ItemGroup>
     <ClCompile Include="imguiVisitor.ixx" />
     <ClCompile Include="src\AbstractNode.ixx" />
+    <ClCompile Include="src\DynamicShader.ixx" />
     <ClCompile Include="src\genericVisitor.ixx" />
     <ClCompile Include="src\glslVisitor.ixx" />
+    <ClCompile Include="src\GL_VERSION_2_0.cpp" />
+    <ClCompile Include="src\GL_VERSION_3_0.cpp" />
     <ClCompile Include="src\OGL.cpp" />
+    <ClCompile Include="src\previewShader.ixx" />
     <ClCompile Include="src\repeat.ixx" />
     <ClCompile Include="src\sdfCapsule.ixx" />
     <ClCompile Include="src\distanceVisitor.ixx" />
@@ -185,6 +189,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\glext.h" />
+    <ClInclude Include="src\GL_VERSION_2_0.h" />
+    <ClInclude Include="src\GL_VERSION_3_0.h" />
     <ClInclude Include="src\guiDef.h" />
     <ClInclude Include="src\khrplatform.h" />
     <ClInclude Include="src\OGL.h" />

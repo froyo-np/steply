@@ -22,6 +22,9 @@
     <Filter Include="Header Files\visitors">
       <UniqueIdentifier>{984fa5da-9f0d-4406-9618-88127c4b6232}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gl">
+      <UniqueIdentifier>{f33f14f0-6dea-4aab-8f9f-2e90c267af49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imvec.ixx">
@@ -84,9 +87,6 @@
     <ClCompile Include="imguiVisitor.ixx">
       <Filter>Header Files\visitors</Filter>
     </ClCompile>
-    <ClCompile Include="src\OGL.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\genericVisitor.ixx">
       <Filter>Header Files\visitors</Filter>
     </ClCompile>
@@ -96,6 +96,21 @@
     <ClCompile Include="src\string_helpers.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\DynamicShader.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OGL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GL_VERSION_2_0.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\previewShader.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GL_VERSION_3_0.cpp">
+      <Filter>Header Files\gl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\glext.h">
@@ -104,14 +119,20 @@
     <ClInclude Include="src\khrplatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OGL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\wglext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\guiDef.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GL_VERSION_2_0.h">
+      <Filter>Header Files\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OGL.h">
+      <Filter>Header Files\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GL_VERSION_3_0.h">
+      <Filter>Header Files\gl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

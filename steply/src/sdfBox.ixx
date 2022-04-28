@@ -5,7 +5,7 @@ module;
 #include "guiDef.h"
 #include <string>
 #define SNAME UI_NAME
-#define SDEF "struct" SNAME " {vec3 dim;};"
+#define SDEF "struct " SNAME " {vec3 dim;};"
 #define FNAME "sdfBox"
 #define FNBODY R"(
 	vec3 d = abs(p)-self.dim;

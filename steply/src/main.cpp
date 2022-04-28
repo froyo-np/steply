@@ -21,12 +21,75 @@ import glslVisitor;
 
 import sdflib;
 import sdfNode;
-
+import DynamicShader;
+import previewShader;
 using namespace SDF;
 
 using sdfNode = sdfTreeGroup<binOpVariant<float>, unaryOpVariant<float>, domainOpVariant<float>, shapeVariant<float>>;
 using sdflib = SDFLIB<float, sdfNode>;
 
+using namespace ivec;
+using namespace codegen;
+struct previewShaderAttrs {
+	GLint cPos, vPos;
+	GLLocation locations[2];
+	previewShaderAttrs() {
+		locations[0] = { &cPos, "cPos" }; locations[1] = { &vPos, "vPos" };
+	}
+};
+struct previewShaderUnis {
+	GLint o;
+	GLint z;
+	GLint mdl;
+	GLLocation locations[3];
+	previewShaderUnis()
+	{
+		locations[0] = { &o, "o" };
+		locations[1] = { &z, "z" };
+		locations[2] = { &mdl, "mdl" };
+	}
+};
+template <typename F, typename GroupType>
+	class previewShader : public StaticInterfaceShader<previewShaderAttrs, previewShaderUnis> {
+	using fvec3 = vec<float, 3>;
+	protected:
+		
+	public:
+		previewShader(const typename GroupType::NodeVariant& sdfObj) : StaticInterfaceShader<previewShaderAttrs, previewShaderUnis>(codegen::getBasicVsrc(), codegen::buildDirectRenderShader<F, GroupType>(sdfObj)) {
+			this->buildAndLink();
+		}
+		
+};
+
+void UpdateView(previewShader<float, sdfNode>* shader, mat<float, 4>& mdl, imvec::vec<float,3> & p, int screenWidth, int screenHeight) {
+	OGL::checkError("start update");
+	float clm[16];
+	mdl.toColumnMajorArray(clm);
+	OGL::BindFramebuffer(GL_FRAMEBUFFER, 0); // unbind as fbo...
+	glViewport(0, 0, screenWidth, screenHeight);
+	glClearColor(0, 0, 0, 1);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	shader->useProgram();
+	OGL::checkError("use prg");
+	OGL::Uniform3f(shader->Unis.o, p.x(), p.y(), p.z());
+	OGL::Uniform1f(shader->Unis.z, p.z() + 1.0);
+	OGL::UniformMatrix4fv(shader->Unis.mdl, 1, false, clm);
+	float a = (float)screenHeight / (float)screenWidth;
+	float w2 = 1.0;
+	float h2 = a;
+	float vPos[8] = { -w2, -h2, w2, -h2, w2, h2, -w2, h2 };
+	uint8_t unitSquare[8] = { 0, 0, 255, 0, 255, 255, 0, 255 };
+	OGL::EnableVertexAttribArray(shader->vAttrs.cPos);
+	OGL::VertexAttribPointer(shader->vAttrs.cPos, 2, GL_UNSIGNED_BYTE, true, 0,
+		unitSquare);
+
+	OGL::EnableVertexAttribArray(shader->vAttrs.vPos);
+	OGL::VertexAttribPointer(shader->vAttrs.vPos, 2, GL_FLOAT, false, 0, vPos);
+	OGL::checkError("pre draw");
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	OGL::checkError("post draw");
+
+}
 
 #define WINDOWMODE WS_VISIBLE | WS_OVERLAPPEDWINDOW
 
@@ -139,6 +202,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static fvec3 camPoint(0, 0, camDistance);
 	static float frametime = 0.0;
 	static mat<float, 4> mdl;
+	static previewShader<float, sdfNode>* shader = nullptr;
 	static std::string clipboard;
 	static sdfNode::NodeVariant objectThing = sdflib::Union(sdflib::Round(0.1,sdflib::Box(fvec3(0.5,0.5,0.5))), sdflib::Move(fvec3(0.5,0,0), sdflib::Sphere(0.6)));
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
@@ -174,8 +238,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			std::cout << dV.getExpr() << std::endl;
 		}
 		break;
+		case 'R':
+			if (shader != nullptr) {
+				delete shader;
+			}
+			shader = new previewShader<float, sdfNode>(objectThing);
+			break;
 		}
 	}
+	break;
 	case WM_CREATE:
 	{
 
@@ -267,6 +338,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// IMGUI //
+		if (shader != nullptr) {
+			UpdateView(shader, mdl, camPoint, screenWidth, screenHeight);
+		}
 		if (showGUI) {
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplWin32_NewFrame();
