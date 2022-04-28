@@ -3,23 +3,23 @@ module;
 export module string_helpers;
 import imvec;
 // so... attempting to use stringstream with c++20 experimental modules refuses to compile - with redefinition errors deep in corecrt.h
-std::string print(float f) {
+export std::string print(float f) {
 	static char buf[1024];
-	//sprintf_s(buf, "%f", f);
+	sprintf_s(buf, "%f", f);
 	return std::string(buf);
 }
-std::string print(int i) {
+export std::string print(int i) {
 	static char buf[1024];
-	//sprintf_s(buf, "%i", i);
+	sprintf_s(buf, "%i", i);
 	return std::string(buf);
 }
-std::string print(unsigned int i) {
+export std::string print(unsigned int i) {
 	static char buf[1024];
-	//sprintf_s(buf, "%i", i);
+	sprintf_s(buf, "%i", i);
 	return std::string(buf);
 }
 
-template <typename F, unsigned short N>
+export template <typename F, unsigned short N>
 inline std::string vecLiteral(ivec::vec<F, N> v) {
 	std::string lit = "vec" + print(N) + "(";
 	for (unsigned int i = 0; i < N; i++) {
@@ -31,7 +31,7 @@ inline std::string vecLiteral(ivec::vec<F, N> v) {
 	return lit + ")";
 }
 
-template <typename F, unsigned short N>
+export template <typename F, unsigned short N>
 inline std::string matLiteral(const ivec::mat<F, N>& m) {
 	std::string me = "mat" + print(N) + "(";
 	for (unsigned int i = 0; i < N; i++) {

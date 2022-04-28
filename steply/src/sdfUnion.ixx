@@ -1,8 +1,9 @@
 module;
+#include <string>
+
 #define max(a,b) a > b ? a : b
 #define min(a,b) a < b ? a : b
 #include "guiDef.h"
-#include <string>
 
 #define sName "empty"
 #define sDef ""

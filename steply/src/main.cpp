@@ -3,7 +3,7 @@
 #include <gl/GL.h>
 #include "glext.h"
 #include "wglext.h"
-#include "OGL.h";
+#include "OGL.h"
 /// IM gui
 #include <imgui.h>
 #include <imgui_impl_win32.h>
@@ -164,6 +164,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case 'H':
 		{
 			glslHeaderVisitor<float, sdfNode> v;
+			//std::cout<<glslStructName(box<float>(ivec::vec<float, 3>(1, 2, 3)));
+			std::cout << glslLiteral(move<float>{ivec::vec<float, 3>(1, 2, 3)}) << std::endl;
+			std::cout << glslLiteral(hexPrism<float>{3,3}) << std::endl;
+			std::visit([](const auto& arg) {std::cout << std::visit([](const auto& arg) {return glslStructName<float>(arg); },arg.getPayload()) << std::endl; }, objectThing);
 			v.visit(objectThing);
 			v.blurt();
 		}

@@ -43,10 +43,11 @@ namespace SDF {
 		template <typename NodeType>
 		void visitUp(const NodeType& node) {
 			auto me = this;
-			std::visit([me](const auto& arg) {me->considerStruct(glslStructName(arg), glslStructDef(arg)); }, node.getPayload());
-			std::visit([me](const auto& arg) {me->considerFn(glslFnName(arg), glslFnDef(arg)); }, node.getPayload());
+			std::visit([me](const auto& arg) {me->considerStruct(glslStructName<F>(arg), glslStructDef<F>(arg)); }, node.getPayload());
+			std::visit([me](const auto& arg) {me->considerFn(glslFnName<F>(arg), glslFnDef<F>(arg)); }, node.getPayload());
 		}
-		void visitUp(const NodeType& node) {
+		template <typename NodeType>
+		void visitDown(const NodeType& node) {
 			// do nothing!
 		}
 		// for debugging
@@ -98,25 +99,25 @@ namespace SDF {
 		}
 		
 	public:
-		void visitUp(const GroupType::Shape& node) {
+		void visitUp(const typename GroupType::Shape& node) {
 		}
-		void visitDown(const GroupType::Shape& node) {
+		void visitDown(const typename GroupType::Shape& node) {
 			
 		}
 
-		void visitUp(const GroupType::UnaryOp& node) {
+		void visitUp(const typename GroupType::UnaryOp& node) {
 		}
-		void visitDown(const GroupType::UnaryOp& node) {
-		}
-
-		void visitUp(const GroupType::DomainOp& node) {
-		}
-		void visitDown(const GroupType::DomainOp& node) {
+		void visitDown(const typename GroupType::UnaryOp& node) {
 		}
 
-		void visitUp(const GroupType::BinaryOp& node) {
+		void visitUp(const typename GroupType::DomainOp& node) {
 		}
-		void visitDown(const GroupType::BinaryOp& node) {
+		void visitDown(const typename GroupType::DomainOp& node) {
+		}
+
+		void visitUp(const typename GroupType::BinaryOp& node) {
+		}
+		void visitDown(const typename GroupType::BinaryOp& node) {
 			
 		}
 	};

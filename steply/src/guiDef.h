@@ -13,5 +13,6 @@ const char* glslStructDef(const cppName<F>& p){return sDef;} \
 export template <typename F> \
 const char* glslFnName(const cppName<F>& p){return fnName;} \
 export template <typename F> \
-const char* glslFnDef(const cppName<F>& p){return fnDef;}
+const char* glslFnDef(const cppName<F>& p){return fnDef;} \
+
 

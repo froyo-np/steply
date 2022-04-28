@@ -1,7 +1,6 @@
 module;
 #define UI_NAME "torus"
 #include "guiDef.h"
-#include <string>
 #define sName "torus"
 #define sDef "struct torus {float radius; float thickness;};"
 #define fnName "sdfTorus"
@@ -35,8 +34,5 @@ export namespace SDF {
 		}
 		decl_uiName(torus, UI_NAME);
 		decl_glslInterface(torus, sName, sDef, fnName, fnDef)
-		export template <typename F>
-		std::string glslLiteral(const torus<F>& self) {
-			return std::string(sName) + "(" + print(self.radius) + ", " + print(self.thickness) + ")";
-		}
+		
 };

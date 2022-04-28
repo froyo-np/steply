@@ -1,8 +1,8 @@
 module;
+#include <string>
 #define max(a,b) a > b ? a : b
 #define abs(a) a >= 0 ? a : -a
 #include "guiDef.h"
-#include <string>
 #define sName "empty"
 #define sDef ""
 #define fnName "sdfIntersect"
