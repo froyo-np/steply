@@ -1,9 +1,21 @@
 module;
 #define UI_NAME "repeat"
 #include "guiDef.h"
+#include <string>
+#define sName "repeat"
+#define sDef "struct repeat {vec3 reps; vec3 stepSize;};"
+#define fnName "sdfRepeat"
+#define fnDef "vec3 " fnName R"((repeat self, vec3 p)
+			{
+				vec3 c = self.stepSize;
+				vec3 l = self.reps;
+				vec3 k = p-c*clamp(round(p/c),-l,l);
+				// but use the normal one... if we're out of bounds?
+				return k;
+			})"
 export module repeat;
 import imvec;
-
+import string_helpers;
 
 export namespace SDF {
 	using namespace ivec;
@@ -24,7 +36,10 @@ export namespace SDF {
 		return k;
 	}
 	decl_uiName(repeat, UI_NAME);
-
-	
+	decl_glslInterface(repeat, sName, sDef, fnName, fnDef)
+	export template <typename F>
+	std::string glslLiteral(const repeat<F>& self) {
+		return std::string(sName) + "(" + vecLiteral<F,3>(self.reps) + ", " + vecLiteral<F, 3>(self.stepSize) + ")";
+	}
 };
 

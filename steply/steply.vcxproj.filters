@@ -87,6 +87,15 @@
     <ClCompile Include="src\OGL.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\genericVisitor.ixx">
+      <Filter>Header Files\visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glslVisitor.ixx">
+      <Filter>Header Files\visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\string_helpers.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\glext.h">

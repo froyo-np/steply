@@ -17,6 +17,8 @@
 import imvec;
 import distanceVisitor;
 import imguiVisitor;
+import glslVisitor;
+
 import sdflib;
 import sdfNode;
 
@@ -159,6 +161,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			showGUI = !showGUI;
 			break;
 		}
+		case 'H':
+		{
+			glslHeaderVisitor<float, sdfNode> v;
+			v.visit(objectThing);
+			v.blurt();
+		}
+		break;
 	}
 	case WM_CREATE:
 	{
@@ -198,6 +207,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		// some random OGL state:
 		glClearColor(0, 0, 0, 0);
+
+
 	}
 	break;
 	case WM_MOUSEWHEEL:

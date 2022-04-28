@@ -129,6 +129,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imgui\backends;C:\Users\Noah\source\repos\steply\imgui;C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+      <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,6 +160,8 @@
   <ItemGroup>
     <ClCompile Include="imguiVisitor.ixx" />
     <ClCompile Include="src\AbstractNode.ixx" />
+    <ClCompile Include="src\genericVisitor.ixx" />
+    <ClCompile Include="src\glslVisitor.ixx" />
     <ClCompile Include="src\OGL.cpp" />
     <ClCompile Include="src\repeat.ixx" />
     <ClCompile Include="src\sdfCapsule.ixx" />
@@ -178,6 +181,7 @@
     <ClCompile Include="src\sdfSubtract.ixx" />
     <ClCompile Include="src\sdfTorus.ixx" />
     <ClCompile Include="src\sdfUnion.ixx" />
+    <ClCompile Include="src\string_helpers.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\glext.h" />

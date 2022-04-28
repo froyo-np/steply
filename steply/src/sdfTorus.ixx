@@ -1,10 +1,22 @@
 module;
 #define UI_NAME "torus"
 #include "guiDef.h"
+#include <string>
+#define sName "torus"
+#define sDef "struct torus {float radius; float thickness;};"
+#define fnName "sdfTorus"
+#define fnDef R"(float sdfTorus(torus self, vec3 p)
+			{
+				float x = length(p.xz) - self.radius;
+				vec2 s = vec2(x,p.y);
+				return length(s) - self.thickness;
+			})"
+
+
 export module sdfTorus;
 
 import imvec;
-
+import string_helpers;
 export namespace SDF {
 	using namespace ivec;
 		template <typename F>
@@ -22,6 +34,9 @@ export namespace SDF {
 			return s.length() - self.thickness;
 		}
 		decl_uiName(torus, UI_NAME);
-		
-		
+		decl_glslInterface(torus, sName, sDef, fnName, fnDef)
+		export template <typename F>
+		std::string glslLiteral(const torus<F>& self) {
+			return std::string(sName) + "(" + print(self.radius) + ", " + print(self.thickness) + ")";
+		}
 };
