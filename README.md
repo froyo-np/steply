@@ -1,6 +1,7 @@
 # steply
 SDF math library - for rendering stuff with SDF functions.
-future plan: make it run in WASM
+future plan: make it run in WASM.
+Interested in details? [read the blog post](https://froyo-np.github.io/c++/2022/03/10/cpp_sdf.html)
 ## purpose
 you can see that c++20 modules are used, hence the .ixx files. Also planned for use is some (new to me) use of patterns like type-erasure, at least to some degree - I might just stop at (static) polymorphism by way of overloading.
 ## build?
