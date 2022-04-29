@@ -33,8 +33,8 @@ export namespace SDF {
 	}
 	decl_uiName(cylinder, UI_NAME);
 	decl_glslInterface(cylinder, sName, sDef, fnName, fnDef)
-		export template <typename F>
-		std::string glslLiteral(const cylinder<F>& self) {
+	export template <typename F>
+	std::string glslLiteral(const cylinder<F>& self) {
 		return std::string(sName) + "(" + print(self.radius) + ", " + print(self.height) + ")";
 	}
 }

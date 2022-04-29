@@ -49,8 +49,8 @@ export namespace SDF {
 	}
 	decl_uiName(hexPrism, UI_NAME);
 	decl_glslInterface(hexPrism, sName,sDef, fnName, fnDef)
-		export template <typename F>
-		std::string glslLiteral(const hexPrism<F>& self) {
+	export template <typename F>
+	std::string glslLiteral(const hexPrism<F>& self) {
 		return std::string(sName) + "(" + print(self.radius) + ", " + print(self.height) + ")";
 	}
 }

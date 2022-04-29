@@ -32,7 +32,7 @@ namespace SDF {
 	using unaryOpVariant = std::variant<round<F>, MoreUnaryOpPayloads...>;
 
 	export template <typename F, typename ...ExtraDomainOpPayloads>
-	using domainOpVariant = std::variant<move<F>, ExtraDomainOpPayloads...>;
+	using domainOpVariant = std::variant<move<F>, repeat<F>, ExtraDomainOpPayloads...>;
 
 	export template <typename F, typename... EvenMoreSDFShapes>
 	using shapeVariant = std::variant<cone<F>, box<F>, torus<F>, sphere<F>,capsule<F>,hexPrism<F>,cylinder<F>, EvenMoreSDFShapes...>;

@@ -28,7 +28,7 @@ namespace SDF {
 		}
 	}
 	export template <class P, class GroupType>
-		class BinOp : public Nodes::Node<P> {
+	class BinOp : public Nodes::Node<P> {
 		protected:
 			std::vector<typename GroupType::NodeVariant> children;
 		public:
@@ -51,7 +51,7 @@ namespace SDF {
 			
 	};
 	export template <class P, class GroupType>
-		class UnOp : public Nodes::Node<P> {
+	class UnOp : public Nodes::Node<P> {
 		protected:
 			std::vector<typename GroupType::NodeVariant> child;
 		public:
@@ -66,7 +66,7 @@ namespace SDF {
 			
 	};
 	export template <class P, class GroupType>
-		class DomOp : public Nodes::Node<P> {
+	class DomOp : public Nodes::Node<P> {
 		protected:
 			std::vector<typename GroupType::NodeVariant> child;
 		public:
@@ -89,7 +89,7 @@ namespace SDF {
 			
 	};
 	export template <typename B, typename U, typename D, typename L, typename... OtherNodeClasses>
-		class sdfTreeGroup : public Nodes::StructuredTree<
+	class sdfTreeGroup : public Nodes::StructuredTree<
 		BinOp<B, sdfTreeGroup<B,U,D,L,OtherNodeClasses...>>,
 		UnOp<U, sdfTreeGroup<B, U, D, L, OtherNodeClasses...>>, 
 		DomOp<D, sdfTreeGroup<B, U, D, L, OtherNodeClasses...>>, 
