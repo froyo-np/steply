@@ -7,11 +7,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "steply", "steply\steply.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imvec_sub", "imvec_sub\imvec_sub.vcxitems", "{20C66F9B-5301-4C65-980A-64EA5FED76AE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgui_sub", "imgui_sub\imgui_sub.vcxitems", "{5DBC4275-7603-4595-9967-D2EDDF77E544}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		imvec_sub\imvec_sub.vcxitems*{20c66f9b-5301-4c65-980a-64ea5fed76ae}*SharedItemsImports = 9
-		imvec_sub\imvec_sub.vcxitems*{3e2eb17d-2b33-4f09-a57c-25bd015ac7dd}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -33,5 +31,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {615BFA21-998B-41FA-B285-77BDB83B88CE}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		imvec_sub\imvec_sub.vcxitems*{20c66f9b-5301-4c65-980a-64ea5fed76ae}*SharedItemsImports = 9
+		imgui_sub\imgui_sub.vcxitems*{3e2eb17d-2b33-4f09-a57c-25bd015ac7dd}*SharedItemsImports = 4
+		imvec_sub\imvec_sub.vcxitems*{3e2eb17d-2b33-4f09-a57c-25bd015ac7dd}*SharedItemsImports = 4
+		imgui_sub\imgui_sub.vcxitems*{5dbc4275-7603-4595-9967-d2eddf77e544}*SharedItemsImports = 9
 	EndGlobalSection
 EndGlobal

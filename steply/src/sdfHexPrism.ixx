@@ -1,8 +1,26 @@
 module;
 #define min(a, b) a < b ? a : b
 #define max(a, b) a > b ? a : b
-export module sdfHexPrism;
+#define UI_NAME "hex prism"
+#include "guiDef.h"
+#include <string>
 
+#define sName "hex"
+#define sDef "struct " sName " {float radius; float height;};"
+#define fnName "sdfHex"
+#define fnBody R"(
+	vec2 h = vec2(self.radius,self.height);
+	const vec3 k = vec3(-0.8660254, 0.5, 0.57735);
+	p = abs(p);
+	p.xy -= 2.0*min(dot(k.xy, p.xy), 0.0)*k.xy;
+	vec2 d = vec2(
+		length(p.xy-vec2(clamp(p.x,-k.z*h.x,k.z*h.x), h.x))*sign(p.y-h.x),
+		p.z-h.y );
+	return min(max(d.x,d.y),0.0) + length(max(d,0.0));
+)"
+#define fnDef decl_glslFunc(fnName, sName,fnBody)
+export module sdfHexPrism;
+import string_helpers;
 import imvec;
 export namespace SDF {
 	using namespace ivec;
@@ -28,5 +46,11 @@ export namespace SDF {
 			p.z() - h.y());
 
 		return min(max(d.x(), d.y()), 0.0f) + vec2::Max(d, vec2(0, 0)).length();
+	}
+	decl_uiName(hexPrism, UI_NAME);
+	decl_glslInterface(hexPrism, sName,sDef, fnName, fnDef)
+	export template <typename F>
+	std::string glslLiteral(const hexPrism<F>& self) {
+		return std::string(sName) + "(" + print(self.radius) + ", " + print(self.height) + ")";
 	}
 }

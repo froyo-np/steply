@@ -57,6 +57,7 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
     <Import Project="..\imvec_sub\imvec_sub.vcxitems" Label="Shared" />
+    <Import Project="..\imgui_sub\imgui_sub.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -90,12 +91,13 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imgui\backends;C:\Users\Noah\source\repos\steply\imgui;C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -107,7 +109,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imgui\backends;C:\Users\Noah\source\repos\steply\imgui;C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
@@ -115,6 +117,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -124,12 +127,14 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imgui\backends;C:\Users\Noah\source\repos\steply\imgui;C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+      <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,7 +146,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Noah\source\repos\steply\imgui\backends;C:\Users\Noah\source\repos\steply\imgui;C:\Users\Noah\source\repos\steply\imvec\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
@@ -149,10 +154,19 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="imguiVisitor.ixx" />
     <ClCompile Include="src\AbstractNode.ixx" />
+    <ClCompile Include="src\DynamicShader.ixx" />
+    <ClCompile Include="src\genericVisitor.ixx" />
+    <ClCompile Include="src\glslVisitor.ixx" />
+    <ClCompile Include="src\GL_VERSION_2_0.cpp" />
+    <ClCompile Include="src\GL_VERSION_3_0.cpp" />
+    <ClCompile Include="src\OGL.cpp" />
+    <ClCompile Include="src\previewShader.ixx" />
     <ClCompile Include="src\repeat.ixx" />
     <ClCompile Include="src\sdfCapsule.ixx" />
     <ClCompile Include="src\distanceVisitor.ixx" />
@@ -171,6 +185,16 @@
     <ClCompile Include="src\sdfSubtract.ixx" />
     <ClCompile Include="src\sdfTorus.ixx" />
     <ClCompile Include="src\sdfUnion.ixx" />
+    <ClCompile Include="src\string_helpers.ixx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\glext.h" />
+    <ClInclude Include="src\GL_VERSION_2_0.h" />
+    <ClInclude Include="src\GL_VERSION_3_0.h" />
+    <ClInclude Include="src\guiDef.h" />
+    <ClInclude Include="src\khrplatform.h" />
+    <ClInclude Include="src\OGL.h" />
+    <ClInclude Include="src\wglext.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

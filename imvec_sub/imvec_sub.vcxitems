@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\imvec\src\imvec\imvec.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\imvec\src\imvec\mat.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\imvec\src\imvec\swizzles.h" />
   </ItemGroup>
 </Project>
