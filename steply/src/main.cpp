@@ -51,7 +51,7 @@ struct previewShaderUnis {
 };
 template <typename F, typename GroupType>
 	class previewShader : public StaticInterfaceShader<previewShaderAttrs, previewShaderUnis> {
-	using fvec3 = vec<float, 3>;
+	using fvec3 = imvec::vec<float, 3>;
 	protected:
 		
 	public:
@@ -60,6 +60,29 @@ template <typename F, typename GroupType>
 		}
 		
 };
+float frand()
+{
+	unsigned int x = rand() % RAND_MAX;
+	return ((float)x) / (float)RAND_MAX;
+}
+float rnd2() {
+	return 2.0 * (frand() - 0.5f);
+}
+
+/**
+sdfNode::NodeVariant&& cheesePlease(float s, unsigned int holes) {
+	// make a scene by subtracting spheres from a cube
+	using fvec3 = imvec::vec<float, 3>;
+	sdfNode::Shape B = sdflib::Box(fvec3(s, s, s));
+	auto obj = sdflib::Subtract(B, sdflib::Sphere(1.0f));
+	for (unsigned int i = 0; i < holes; i++) {
+		float r = frand() * (s / 100.0f);
+		fvec3 offset = fvec3(rnd2(), rnd2(), rnd2()) * s;
+		obj = sdflib::Subtract(std::move(obj), sdflib::Move(offset, sdflib::Sphere(r)));
+	}
+	return std::move(obj);
+}
+*/
 
 void UpdateView(previewShader<float, sdfNode>* shader, mat<float, 4>& mdl, imvec::vec<float,3> & p, int screenWidth, int screenHeight) {
 	OGL::checkError("start update");
@@ -95,11 +118,7 @@ void UpdateView(previewShader<float, sdfNode>* shader, mat<float, 4>& mdl, imvec
 
 #define MAX_LOADSTRING 100
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-float frand()
-{
-	unsigned int x = rand() % 100000;
-	return (float)x / 100000.0f;
-}
+
 
 #define APPNAME L"SDF VIEWER"
 ATOM MyRegisterClass(HINSTANCE hInstance)
@@ -204,7 +223,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static mat<float, 4> mdl;
 	static previewShader<float, sdfNode>* shader = nullptr;
 	static std::string clipboard;
-	static sdfNode::NodeVariant objectThing = sdflib::Union(sdflib::Round(0.1,sdflib::Box(fvec3(0.5,0.5,0.5))), sdflib::Move(fvec3(0.5,0,0), sdflib::Sphere(0.6)));
+	static sdfNode::NodeVariant objectThing = sdflib::Box(fvec3(50, 50, 50));// sdflib::Union(sdflib::Round(0.1, sdflib::Box(fvec3(0.5, 0.5, 0.5))), sdflib::Move(fvec3(0.5, 0, 0), sdflib::Sphere(0.6)));
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
 	{
 		return true;
@@ -236,6 +255,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			glslDirectCallVisitor<float, sdfNode> dV("p");
 			dV.visit(objectThing);
 			std::cout << dV.getExpr() << std::endl;
+		}
+		break;
+		case 'B':
+		{
+			unsigned int holes = 30;
+			float s = 50.0f;
+			for (unsigned int i = 0; i < holes; i++) {
+				float r = frand() * (s / 3.0f);
+				fvec3 offset = fvec3(rnd2(), rnd2(), rnd2()) * s;
+				objectThing = sdflib::Subtract(0.5, std::move(objectThing), sdflib::Move(offset, sdflib::Sphere(r)));
+			}
 		}
 		break;
 		case 'R':

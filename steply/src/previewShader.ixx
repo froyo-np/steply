@@ -36,15 +36,15 @@ module;
 )"
 #define evalNormalFn evalNormalSig evalNormalBody
 
-constexpr const char* directRenderFragmentShader = R"(
+#define directRenderFragmentShader R"(
 uniform mat4 mdl;
 varying vec3 origin;
 varying vec3 p;
 const float kDistThresh = 0.0003;
 const vec3 lColor = vec3(0.75,0.75,0.75);
-const vec3 lightPos = vec3(32,12,-2);
+const vec3 lightPos = vec3(3200,1200,-200);
 const vec3 ambLight = vec3(0.32,0.32,0.32);
-const vec3 offLightPos = vec3(-30,-12,-12);
+const vec3 offLightPos = vec3(-3000,-1200,-1200);
 float shadowRamp(float lDst, float lmDst){
 	float d = lDst - lmDst;
 	float k = 1.0-smoothstep(kDistThresh*0.5,kDistThresh*15.0,d*d);
@@ -88,11 +88,10 @@ void main(){
 	gl_FragData[0] = vec4(surfaceColor*lCmp, alpha);
 
 }
-)";
+)"
 
 
-constexpr const char* vsrcBody =
-R"(
+#define vsrcBody R"(
 uniform vec3 o;
 uniform float z;
 uniform mat4 mdl;
@@ -112,7 +111,7 @@ void main(){
 	p = (mdl*vec4(vPos.x,vPos.y,z,1.0)).xyz;
 	gl_Position = vec4(2.0*(cPos-0.5), 0.0, 1.0);
 }
-)";
+)"
 
 export module previewShader;
 import DynamicShader;

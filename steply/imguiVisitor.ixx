@@ -265,6 +265,7 @@ namespace SDF {
 				return typename GroupType::DomainOp(dom, std::move(parent));
 			}
 		}
+		return false;
 	}
 	template <typename GroupType, typename W>
 	guiResult<GroupType> addShape(W& parent) {
@@ -276,7 +277,7 @@ namespace SDF {
 				return typename GroupType::BinaryOp(bins[0], std::move(parent), typename GroupType::Shape(shape));
 			}
 		}
-
+		return false;
 	}
 	template <typename GroupType, typename W>
 	guiResult<GroupType> showInsertWidget(W& parent) {
@@ -401,6 +402,7 @@ namespace SDF {
 			ImGui::TreePop();
 			return handleVisitResult<GroupType>(node, result);
 		}
+		return false;
 	}
 	export template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::DomainOp& node) {
@@ -425,6 +427,7 @@ namespace SDF {
 			ImGui::TreePop();
 			return handleVisitResult<GroupType>(node, result);
 		}
+		return false;
 	}
 	export template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::Shape& node) {
@@ -446,6 +449,7 @@ namespace SDF {
 			editPayload<F, typename GroupType::Shape>(node);
 			ImGui::TreePop();
 		}
+		return false;
 	}
 
 	export template<typename F, typename GroupType>
