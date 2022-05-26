@@ -27,67 +27,64 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\imvec.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfBox.ixx">
+    <ClCompile Include="src\sdfBox.hpp">
       <Filter>Header Files\primatives</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfSphere.ixx">
+    <ClCompile Include="src\sdfSphere.hpp">
       <Filter>Header Files\primatives</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfTorus.ixx">
+    <ClCompile Include="src\sdfTorus.hpp">
       <Filter>Header Files\primatives</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfCone.ixx">
+    <ClCompile Include="src\sdfCone.hpp">
       <Filter>Header Files\primatives</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfIntersect.ixx">
+    <ClCompile Include="src\sdfIntersect.hpp">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfUnion.ixx">
+    <ClCompile Include="src\sdfUnion.hpp">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfSubtract.ixx">
+    <ClCompile Include="src\sdfSubtract.hpp">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdflib.ixx">
+    <ClCompile Include="src\sdflib.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\distanceVisitor.ixx">
+    <ClCompile Include="src\distanceVisitor.hpp">
       <Filter>Header Files\visitors</Filter>
     </ClCompile>
-    <ClCompile Include="src\round.ixx">
+    <ClCompile Include="src\round.hpp">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
-    <ClCompile Include="src\move.ixx">
+    <ClCompile Include="src\move.hpp">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfCapsule.ixx">
+    <ClCompile Include="src\sdfCapsule.hpp">
       <Filter>Header Files\primatives</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfCylinder.ixx">
+    <ClCompile Include="src\sdfCylinder.hpp">
       <Filter>Header Files\primatives</Filter>
     </ClCompile>
-    <ClCompile Include="src\sdfHexPrism.ixx">
+    <ClCompile Include="src\sdfHexPrism.hpp">
       <Filter>Header Files\primatives</Filter>
     </ClCompile>
-    <ClCompile Include="src\repeat.ixx">
+    <ClCompile Include="src\repeat.hpp">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
-    <ClCompile Include="imguiVisitor.ixx">
+    <ClCompile Include="imguiVisitor.hpp">
       <Filter>Header Files\visitors</Filter>
     </ClCompile>
-    <ClCompile Include="src\glslVisitor.ixx">
+    <ClCompile Include="src\glslVisitor.hpp">
       <Filter>Header Files\visitors</Filter>
     </ClCompile>
-    <ClCompile Include="src\string_helpers.ixx">
+    <ClCompile Include="src\string_helpers.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\DynamicShader.ixx">
+    <ClCompile Include="src\DynamicShader.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="src\OGL.cpp">
@@ -96,11 +93,17 @@
     <ClCompile Include="src\GL_VERSION_2_0.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\previewShader.ixx">
+    <ClCompile Include="src\previewShader.h">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GL_VERSION_3_0.cpp">
       <Filter>Header Files\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\string_helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\previewShader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

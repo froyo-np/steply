@@ -1,4 +1,4 @@
-module;
+#pragma once
 #include <string>
 #define dstFnSig R"(float evalDistance(vec3 pnt)
 )"
@@ -113,16 +113,16 @@ void main(){
 }
 )"
 
-export module previewShader;
-import DynamicShader;
-import sdflib;
-import glslVisitor;
-import imvec;
+#include "DynamicShader.hpp"
+#include "sdflib.hpp"
+#include "glslVisitor.hpp"
 
-export namespace codegen {
+#include "imvec\imvec.hpp"
+
+namespace codegen {
 	using namespace SDF;
 	template <typename F>
-	std::string buildObjEvaluationCall(INode<F>* obj) {
+	inline std::string buildObjEvaluationCall(INode<F>* obj) {
 		glslDirectCallVisitor<F> callme(std::string("pnt"));
 		//callme.visit(obj);
 		obj->visit(&callme);
@@ -130,24 +130,17 @@ export namespace codegen {
 	}
 	// return a function like: float evalDistance(vec3 pnt)
 	template <typename F>
-	std::string buildObjEvaluationFn(INode<F>* obj) {
+	inline std::string buildObjEvaluationFn(INode<F>* obj) {
 		auto expr = buildObjEvaluationCall<F>(obj);
 		return std::string(dstFnSig) + "{\n\t return " + expr + ";\n}\n";
 	}
 	// return a function like: marchResult march(vec3 start, vec3 dir, float thresh);
-	std::string buildObjRayMarchFn() {
-		// its fully static, since we wrapped the fn directly!
-		return std::string(marchFn);
-	}
+	std::string buildObjRayMarchFn();
 	// return a function like: vec3 evalNormal(vec3 p, float e)
-	std::string buildNormalEstimation() {
-		return std::string(evalNormalFn);
-	}
-	std::string getBasicVsrc() {
-		return std::string(vsrcBody);
-	}
+	std::string buildNormalEstimation();
+	std::string getBasicVsrc();
 	template <typename F>
-	std::string buildDirectRenderShader(INode<F>* obj) {
+	inline std::string buildDirectRenderShader(INode<F>* obj) {
 		glslHeaderVisitor<F> headers;
 		obj->visit(&headers);
 		std::string header("#version 130\n");

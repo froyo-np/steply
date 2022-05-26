@@ -1,15 +1,16 @@
-module;
+#pragma once
 #include <variant>
 #include <string>
 #include <map>
 #include <stack>
 #include <iostream>
-export module glslVisitor;
-import imvec;
-import sdflib;
+
+#include "imvec\imvec.hpp"
+#include "sdflib.hpp"
+
 namespace SDF {
 	/**/
-	export template <typename F>
+	template <typename F>
 	class glslHeaderVisitor : public IVisitor<F> {
 	protected:
 		
@@ -66,7 +67,7 @@ namespace SDF {
 		virtual void visitLeaf(LeafNode<F>* node, shapeVariant<F>& payload) { helper(payload); }
 	};
 	
-	export template <typename F>
+	template <typename F>
 	class glslDirectCallVisitor : public IVisitor<F> {
 	protected:
 		std::stack<std::string> subExprStack;

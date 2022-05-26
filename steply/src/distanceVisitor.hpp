@@ -1,15 +1,15 @@
-module;
+#pragma once
 #include <variant>
 #include <stack>
-export module distanceVisitor;
-import imvec;
-import sdflib;
+
+#include "imvec\imvec.hpp"
+#include "sdflib.hpp"
 
 namespace SDF {
 	
-	export template <typename F>
+	template <typename F>
 	class DistanceVisitor : public IVisitor<F> {
-		using vec3 = ivec::vec<F, 3>;
+		using vec3 = imvec::vec<F, 3>;
 	protected:
 		std::stack<vec3> pStack;
 		std::stack<F> dstStack;

@@ -1,12 +1,11 @@
-module;
+#pragma once
+
 #include <string>
 #include <iostream>
 #include "OGL.h"
-export module DynamicShader;
 
-export GLint;
 
-export struct Handles {
+struct Handles {
 	GLhandleARB vertexShader;
 	GLhandleARB fragmentShader;
 	GLhandleARB program;
@@ -16,12 +15,12 @@ export struct Handles {
 		fragmentShader = 0;
 	}
 };
-export struct GLLocation {
+struct GLLocation {
 	GLint* loc;
 	const char* name;
 };
 
-export template <typename Attrs, typename Uniforms>
+template <typename Attrs, typename Uniforms>
 class StaticInterfaceShader {
 protected:
 	Handles handles;

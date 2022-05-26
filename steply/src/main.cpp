@@ -14,18 +14,19 @@
 #include <iostream>
 #include <variant>
 
-import imvec;
-import distanceVisitor;
-import imguiVisitor;
-import glslVisitor;
+#include "imvec\imvec.hpp"
+#include "distanceVisitor.hpp"
+//#include "imguiVisitor.hpp"
+#include "glslVisitor.hpp"
 
-import sdflib;
-import DynamicShader;
-import previewShader;
+#include "sdflib.hpp"
+#include "DynamicShader.hpp"
+#include "previewShader.h"
+
 using namespace SDF;
 
 
-using namespace ivec;
+using namespace imvec;
 using namespace codegen;
 struct previewShaderAttrs {
 	GLint cPos, vPos;
@@ -48,7 +49,7 @@ struct previewShaderUnis {
 };
 template <typename F>
 	class previewShader : public StaticInterfaceShader<previewShaderAttrs, previewShaderUnis> {
-	using fvec3 = ivec::vec<F, 3>;
+	using fvec3 = imvec::vec<F, 3>;
 	protected:
 		
 	public:
@@ -201,10 +202,10 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	using namespace ivec;
-	using uivec2 = ivec::vec<unsigned int, 2>;
-	using fvec3 = ivec::vec<float, 3>;
-	using ivec2 = ivec::vec<int, 2>;
+	using namespace imvec;
+	using uivec2 = imvec::vec<unsigned int, 2>;
+	using fvec3 = imvec::vec<float, 3>;
+	using ivec2 = imvec::vec<int, 2>;
 	static HDC hdc;
 	static HGLRC hglRC;
 	static int screenWidth;

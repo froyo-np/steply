@@ -1,14 +1,13 @@
-module;
+#pragma once
 #include <variant>
 #include <imgui.h>
-export module imguiVisitor;
-import imvec;
+#include "imvec\imvec.hpp"
 
 namespace SDF {
 
 	/**
 	template <typename F, unsigned short N>
-	using vec = ivec::vec<F,N>;
+	using vec = imvec::vec<F,N>;
 	template <typename F>
 	using prims = shapeVariant<F>;
 	
@@ -348,7 +347,7 @@ namespace SDF {
 	template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::BinaryOp& node);
 
-	export template<typename F, typename GroupType>
+	template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::BinaryOp& node) {
 		if (ImGui::SmallButton("x")) {
 			return true;
@@ -378,7 +377,7 @@ namespace SDF {
 		}
 		return false;
 	}
-	export template<typename F, typename GroupType>
+	template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::UnaryOp& node) {
 		if (ImGui::SmallButton("x")) {
 			return node.takeChild();
@@ -403,7 +402,7 @@ namespace SDF {
 		}
 		return false;
 	}
-	export template<typename F, typename GroupType>
+	template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::DomainOp& node) {
 		if (ImGui::SmallButton("x")) {
 			return node.takeChild();
@@ -428,7 +427,7 @@ namespace SDF {
 		}
 		return false;
 	}
-	export template<typename F, typename GroupType>
+	template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::Shape& node) {
 		if (ImGui::SmallButton("x")) {
 			return true;
@@ -451,7 +450,7 @@ namespace SDF {
 		return false;
 	}
 
-	export template<typename F, typename GroupType>
+	template<typename F, typename GroupType>
 	guiResult<GroupType> guiVisit(typename GroupType::NodeVariant& node) {
 		return std::visit(
 			[](auto& arg) {return guiVisit<F, GroupType>(arg); }, node);
