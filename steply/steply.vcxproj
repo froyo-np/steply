@@ -161,9 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="imguiVisitor.ixx" />
-    <ClCompile Include="src\AbstractNode.ixx" />
     <ClCompile Include="src\DynamicShader.ixx" />
-    <ClCompile Include="src\genericVisitor.ixx" />
     <ClCompile Include="src\glslVisitor.ixx" />
     <ClCompile Include="src\GL_VERSION_2_0.cpp" />
     <ClCompile Include="src\GL_VERSION_3_0.cpp" />
@@ -182,7 +180,6 @@
     <ClCompile Include="src\sdfHexPrism.ixx" />
     <ClCompile Include="src\sdfIntersect.ixx" />
     <ClCompile Include="src\sdflib.ixx" />
-    <ClCompile Include="src\sdfNode.ixx" />
     <ClCompile Include="src\sdfSphere.ixx" />
     <ClCompile Include="src\sdfSubtract.ixx" />
     <ClCompile Include="src\sdfTorus.ixx" />

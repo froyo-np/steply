@@ -35,9 +35,9 @@ export namespace SDF {
 		vec3 k = p - c * vec3::Min(vec3::Max((p / c).round(), l * -1.0), l);
 		return k;
 	}
-	decl_uiName(repeat, UI_NAME);
+	decl_uiName(repeat, UI_NAME)
 	decl_glslInterface(repeat, sName, sDef, fnName, fnDef)
-	export template <typename F>
+	template <typename F>
 	std::string glslLiteral(const repeat<F>& self) {
 		return std::string(sName) + "(" + vecLiteral<F,3>(self.reps) + ", " + vecLiteral<F, 3>(self.stepSize) + ")";
 	}

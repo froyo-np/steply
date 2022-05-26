@@ -60,17 +60,11 @@
     <ClCompile Include="src\distanceVisitor.ixx">
       <Filter>Header Files\visitors</Filter>
     </ClCompile>
-    <ClCompile Include="src\AbstractNode.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\round.ixx">
       <Filter>Header Files\operators</Filter>
     </ClCompile>
     <ClCompile Include="src\move.ixx">
       <Filter>Header Files\operators</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sdfNode.ixx">
-      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="src\sdfCapsule.ixx">
       <Filter>Header Files\primatives</Filter>
@@ -85,9 +79,6 @@
       <Filter>Header Files\operators</Filter>
     </ClCompile>
     <ClCompile Include="imguiVisitor.ixx">
-      <Filter>Header Files\visitors</Filter>
-    </ClCompile>
-    <ClCompile Include="src\genericVisitor.ixx">
       <Filter>Header Files\visitors</Filter>
     </ClCompile>
     <ClCompile Include="src\glslVisitor.ixx">

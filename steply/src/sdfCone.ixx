@@ -58,9 +58,9 @@ export namespace SDF {
 			vec<F, 3> ptr = wtf * j;
 			return (p - ptr).length();
 		}
-		decl_uiName(cone, UI_NAME);
+		decl_uiName(cone, UI_NAME)
 		decl_glslInterface(cone, sName,sDef,fnName,fnDef)
-		export template <typename F>
+		template <typename F>
 		std::string glslLiteral(const cone<F>& self) {
 			return std::string(sName) + "(" + print(self.radius)+", "+print(self.height) + ")";
 		}

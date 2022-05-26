@@ -115,21 +115,23 @@ void main(){
 
 export module previewShader;
 import DynamicShader;
+import sdflib;
 import glslVisitor;
 import imvec;
 
 export namespace codegen {
 	using namespace SDF;
-	template <typename F, typename GroupType>
-	std::string buildObjEvaluationCall(const typename GroupType::NodeVariant& obj) {
-		glslDirectCallVisitor<F, GroupType> callme(std::string("pnt"));
-		callme.visit(obj);
+	template <typename F>
+	std::string buildObjEvaluationCall(INode<F>* obj) {
+		glslDirectCallVisitor<F> callme(std::string("pnt"));
+		//callme.visit(obj);
+		obj->visit(&callme);
 		return callme.getExpr();
 	}
 	// return a function like: float evalDistance(vec3 pnt)
-	template <typename F, typename GroupType>
-	std::string buildObjEvaluationFn(const typename GroupType::NodeVariant& obj) {
-		auto expr = buildObjEvaluationCall<F, GroupType>(obj);
+	template <typename F>
+	std::string buildObjEvaluationFn(INode<F>* obj) {
+		auto expr = buildObjEvaluationCall<F>(obj);
 		return std::string(dstFnSig) + "{\n\t return " + expr + ";\n}\n";
 	}
 	// return a function like: marchResult march(vec3 start, vec3 dir, float thresh);
@@ -144,10 +146,10 @@ export namespace codegen {
 	std::string getBasicVsrc() {
 		return std::string(vsrcBody);
 	}
-	template <typename F, typename GroupType>
-	std::string buildDirectRenderShader(const typename GroupType::NodeVariant& obj) {
-		glslHeaderVisitor<F, GroupType> headers;
-		headers.visit(obj);
+	template <typename F>
+	std::string buildDirectRenderShader(INode<F>* obj) {
+		glslHeaderVisitor<F> headers;
+		obj->visit(&headers);
 		std::string header("#version 130\n");
 		for (auto sdef : headers.structDefs) {
 			header += sdef.second + "\n";
@@ -156,7 +158,7 @@ export namespace codegen {
 			header += fndef.second + "\n";
 		}
 		// now add evalDistance, evalNormal, march
-		header += buildObjEvaluationFn<F, GroupType>(obj) + "\n";
+		header += buildObjEvaluationFn<F>(obj) + "\n";
 		header += buildObjRayMarchFn() + "\n";
 		header += buildNormalEstimation() + "\n";
 

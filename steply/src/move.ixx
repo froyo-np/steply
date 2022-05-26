@@ -24,9 +24,9 @@ export namespace SDF {
 	inline ivec::vec<F, 3> sdfDomainOp(const move<F>& trn, const ivec::vec<F, 3>& pnt) {
 		return trn.offset + pnt;
 	}
-	decl_uiName(move, UI_NAME);
+	decl_uiName(move, UI_NAME)
 	decl_glslInterface(move,sName,sDef,fnName,fnDef)
-	export template <typename F>
+	template <typename F>
 	std::string glslLiteral(const move<F>& self) {
 		return vecLiteral<F, 3>(self.offset);
 	}

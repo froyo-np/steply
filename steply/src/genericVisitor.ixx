@@ -2,7 +2,6 @@ module;
 #include <variant>
 
 export module genericVisitor;
-import sdfNode;
 
 namespace SDF {
 

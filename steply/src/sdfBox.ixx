@@ -35,7 +35,7 @@ export namespace SDF {
 		}
 		decl_uiName(box, UI_NAME)
 		decl_glslInterface(box, SNAME, SDEF, FNAME, FNDEF)
-		export template <typename F>
+		template <typename F>
 			std::string glslLiteral(const box<F>& self) {
 			return std::string(SNAME) + "(" + vecLiteral<F, 3>(self.dim) + ")";
 		}

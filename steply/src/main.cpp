@@ -20,13 +20,10 @@ import imguiVisitor;
 import glslVisitor;
 
 import sdflib;
-import sdfNode;
 import DynamicShader;
 import previewShader;
 using namespace SDF;
 
-using sdfNode = sdfTreeGroup<binOpVariant<float>, unaryOpVariant<float>, domainOpVariant<float>, shapeVariant<float>>;
-using sdflib = SDFLIB<float, sdfNode>;
 
 using namespace ivec;
 using namespace codegen;
@@ -49,13 +46,13 @@ struct previewShaderUnis {
 		locations[2] = { &mdl, "mdl" };
 	}
 };
-template <typename F, typename GroupType>
+template <typename F>
 	class previewShader : public StaticInterfaceShader<previewShaderAttrs, previewShaderUnis> {
-	using fvec3 = imvec::vec<float, 3>;
+	using fvec3 = ivec::vec<F, 3>;
 	protected:
 		
 	public:
-		previewShader(const typename GroupType::NodeVariant& sdfObj) : StaticInterfaceShader<previewShaderAttrs, previewShaderUnis>(codegen::getBasicVsrc(), codegen::buildDirectRenderShader<F, GroupType>(sdfObj)) {
+		previewShader(INode<F>* sdfObj) : StaticInterfaceShader<previewShaderAttrs, previewShaderUnis>(codegen::getBasicVsrc(), codegen::buildDirectRenderShader<F>(sdfObj)) {
 			this->buildAndLink();
 		}
 		
@@ -84,7 +81,7 @@ sdfNode::NodeVariant&& cheesePlease(float s, unsigned int holes) {
 }
 */
 
-void UpdateView(previewShader<float, sdfNode>* shader, mat<float, 4>& mdl, imvec::vec<float,3> & p, int screenWidth, int screenHeight) {
+void UpdateView(previewShader<float>* shader, mat<float, 4>& mdl, imvec::vec<float,3> & p, int screenWidth, int screenHeight) {
 	OGL::checkError("start update");
 	float clm[16];
 	mdl.toColumnMajorArray(clm);
@@ -212,7 +209,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static HGLRC hglRC;
 	static int screenWidth;
 	static int screenHeight;
-	static bool showGUI = true;
+	static bool showGUI = false;
 	// mouse garbage: delete me please!
 	static ivec2 lastMousePosScreenPx(0,0);
 	static bool lDown = false;
@@ -221,9 +218,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static fvec3 camPoint(0, 0, camDistance);
 	static float frametime = 0.0;
 	static mat<float, 4> mdl;
-	static previewShader<float, sdfNode>* shader = nullptr;
+	static previewShader<float>* shader = nullptr;
 	static std::string clipboard;
-	static sdfNode::NodeVariant objectThing = sdflib::Box(fvec3(50, 50, 50));// sdflib::Union(sdflib::Round(0.1, sdflib::Box(fvec3(0.5, 0.5, 0.5))), sdflib::Move(fvec3(0.5, 0, 0), sdflib::Sphere(0.6)));
+	static std::unique_ptr<INode<float>> objectThing = SDF::Box<float>(fvec3(50,50,50));
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
 	{
 		return true;
@@ -243,20 +240,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case 'G':
 			showGUI = !showGUI;
 			break;
-		case 'H':
-		{
-			glslHeaderVisitor<float, sdfNode> v;
-			//std::cout<<glslStructName(box<float>(ivec::vec<float, 3>(1, 2, 3)));
-			std::cout << glslLiteral(move<float>{ivec::vec<float, 3>(1, 2, 3)}) << std::endl;
-			std::cout << glslLiteral(hexPrism<float>{3, 3}) << std::endl;
-			std::visit([](const auto& arg) {std::cout << std::visit([](const auto& arg) {return glslStructName<float>(arg); }, arg.getPayload()) << std::endl; }, objectThing);
-			v.visit(objectThing);
-			v.blurt();
-			glslDirectCallVisitor<float, sdfNode> dV("p");
-			dV.visit(objectThing);
-			std::cout << dV.getExpr() << std::endl;
-		}
-		break;
+		
 		case 'B':
 		{
 			unsigned int holes = 30;
@@ -264,7 +248,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			for (unsigned int i = 0; i < holes; i++) {
 				float r = frand() * (s / 3.0f);
 				fvec3 offset = fvec3(rnd2(), rnd2(), rnd2()) * s;
-				objectThing = sdflib::Subtract(0.5, std::move(objectThing), sdflib::Move(offset, sdflib::Sphere(r)));
+				objectThing = SDF::Subtract<float>(0.5, std::move(objectThing), SDF::Move<float>(offset, SDF::Sphere<float>(r)));
 			}
 		}
 		break;
@@ -272,7 +256,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (shader != nullptr) {
 				delete shader;
 			}
-			shader = new previewShader<float, sdfNode>(objectThing);
+			shader = new previewShader<float>(objectThing.get());
 			break;
 		}
 	}
@@ -377,11 +361,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ImGui::NewFrame();
 
 			// draw the gui
-			auto result = guiVisit<float,sdfNode>(objectThing);
-			auto nPtr = std::get_if<sdfNode::NodeVariant>(&result);
-			if (nPtr != nullptr) {
-				objectThing = *nPtr;
-			}
+			//auto result = guiVisit<float,sdfNode>(objectThing);
+			//auto nPtr = std::get_if<sdfNode::NodeVariant>(&result);
+			//if (nPtr != nullptr) {
+			//	objectThing = *nPtr;
+			//}
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}

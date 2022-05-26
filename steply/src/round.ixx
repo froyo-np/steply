@@ -21,9 +21,9 @@ export namespace SDF {
 	inline F sdfUnaryOp(const round<F>& i, F a) {
 		return a - i.radius;
 	}
-	decl_uiName(round, UI_NAME);
+	decl_uiName(round, UI_NAME)
 	decl_glslInterface(round,sName,sDef,fnName,fnDef)
-	export template <typename F>
+	template <typename F>
 	std::string glslLiteral(const round<F>& self) {
 		return print(self.radius);
 	}

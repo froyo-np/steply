@@ -45,16 +45,16 @@ export namespace SDF {
 		F h = max(k - abs(-b - a), 0.0);
 		return max(-b, a) + h * h * 0.25 / k;
 	}
-	decl_uiName(subtract, "subtract");
-	decl_uiName(smoothSubtract, "smooth subtract");
+	decl_uiName(subtract, "subtract")
+	decl_uiName(smoothSubtract, "smooth subtract")
 
-	decl_glslInterface(subtract, sName, sDef, fnName, fnDef);
+	decl_glslInterface(subtract, sName, sDef, fnName, fnDef)
 	decl_glslInterface(smoothSubtract,ssName,ssDef,sfnName,sfnDef)
-	export template <typename F>
+	template <typename F>
 		std::string glslLiteral(const subtract<F>& self) {
 		return std::string("");
 	}
-	export template <typename F>
+	template <typename F>
 		std::string glslLiteral(const smoothSubtract<F>& self) {
 		return print(self.radius);
 	}

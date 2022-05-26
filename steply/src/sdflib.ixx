@@ -5,7 +5,6 @@ module;
 #include <array>
 export module sdflib;
 import imvec;
-import sdfNode;
 // prims
 export import sdfBox;
 export import sdfCone;
@@ -24,79 +23,155 @@ export import repeat;
 
 namespace SDF {
 
-	export template <typename F, typename... UserDefinedBinOpPayloads>
-	using binOpVariant = std::variant<union_sdf<F>, smoothUnion<F>, intersect<F>, smoothIntersect<F>, subtract<F>, smoothSubtract<F>, UserDefinedBinOpPayloads...>;
+	export template <typename F>
+	using binOpVariant = std::variant<union_sdf<F>, smoothUnion<F>, intersect<F>, smoothIntersect<F>, subtract<F>, smoothSubtract<F>>;
 	
+	export template <typename F>
+	using unaryOpVariant = std::variant<round<F>>;
 
-	export template <typename F, typename... MoreUnaryOpPayloads>
-	using unaryOpVariant = std::variant<round<F>, MoreUnaryOpPayloads...>;
+	export template <typename F>
+	using domainOpVariant = std::variant<move<F>, repeat<F>>;
 
-	export template <typename F, typename ...ExtraDomainOpPayloads>
-	using domainOpVariant = std::variant<move<F>, repeat<F>, ExtraDomainOpPayloads...>;
+	export template <typename F>
+	using shapeVariant = std::variant<cone<F>, box<F>, torus<F>, sphere<F>,capsule<F>,hexPrism<F>,cylinder<F>>;
 
-	export template <typename F, typename... EvenMoreSDFShapes>
-	using shapeVariant = std::variant<cone<F>, box<F>, torus<F>, sphere<F>,capsule<F>,hexPrism<F>,cylinder<F>, EvenMoreSDFShapes...>;
+	template <typename F>
+	class IVisitor;
 
-	// at some point, the user of this library must declare a subclass of sdfTreeNode, so that they can actually implement some of this stuff, and also
-	// have the chance to define their own node types. this does not by them much...
-	export template <typename F, typename NodeGroupType>
-	class SDFLIB {
+	export template <typename F>
+	class INode {
 	public:
-		static inline auto Union(typename NodeGroupType::NodeVariant&& lhs, typename NodeGroupType::NodeVariant&& rhs) {
-			return typename NodeGroupType::BinaryOp(union_sdf<F>(), std::move(lhs), std::move(rhs));
-		}
+		virtual void visit(IVisitor<F>* visitor) = 0;
 
-		static inline auto Union(F radius, typename NodeGroupType::NodeVariant&& lhs, typename NodeGroupType::NodeVariant&& rhs) {
-			return typename NodeGroupType::BinaryOp(smoothUnion<F>(radius), std::move(lhs), std::move(rhs));
-		}
-
-		static inline auto Intersect(typename NodeGroupType::NodeVariant&& lhs, typename NodeGroupType::NodeVariant&& rhs) {
-			return typename NodeGroupType::BinaryOp(intersect<F>(), std::move(lhs), std::move(rhs));
-		}
-
-		static inline auto Intersect(F radius, typename NodeGroupType::NodeVariant&& lhs, typename NodeGroupType::NodeVariant&& rhs) {
-			return typename NodeGroupType::BinaryOp(smoothIntersect<F>(radius), std::move(lhs), std::move(rhs));
-		}
-
-		static inline auto Subtract(typename NodeGroupType::NodeVariant&& lhs, typename NodeGroupType::NodeVariant&& rhs) {
-			return typename NodeGroupType::BinaryOp(subtract<F>(), std::move(lhs), std::move(rhs));
-		}
-
-		static inline auto Subtract(F radius, typename NodeGroupType::NodeVariant&& lhs, typename NodeGroupType::NodeVariant&& rhs) {
-			return typename NodeGroupType::BinaryOp(smoothSubtract<F>(radius), std::move(lhs), std::move(rhs));
-		}
-
-		static inline auto Move(ivec::vec<F,3> offset, typename NodeGroupType::NodeVariant&& subtree) {
-			return typename NodeGroupType::DomainOp(move<F>(offset), std::move(subtree));
-		}
-
-		static inline auto Round(F radius, typename NodeGroupType::NodeVariant&& subtree) {
-			return typename NodeGroupType::UnaryOp(round<F>(radius), std::move(subtree));
-		}
-
-		static inline auto Box(ivec::vec<F, 3> dim) {
-			return typename NodeGroupType::Shape(box<F>(dim));
-		}
-		static inline auto Cone(F radius, F height) {
-			return typename NodeGroupType::Shape(cone<F>(radius, height));
-		}
-		static inline auto Torus(F radius, F thickness) {
-			return typename NodeGroupType::Shape(torus<F>(radius, thickness));
-		}
-		static inline auto Sphere(F radius) {
-			return typename NodeGroupType::Shape(sphere<F>(radius));
-		}
-
-		static inline auto Cylinder(F radius, F height) {
-			return typename NodeGroupType::Shape(cylinder<F>(radius,height));
-		}
-
-		static inline auto HexPrism(F radius, F height) {
-			return typename NodeGroupType::Shape(hexPrism<F>(radius, height));
-		}
-
-		static inline auto Capsule(ivec::vec<F,3> a, ivec::vec<F,3> b) {
-			return typename NodeGroupType::Shape(capsule<F>(a,b));
+	};
+	export template <typename F>
+	class BinaryNode : public INode<F> {
+	protected:
+		binOpVariant<F> payload;
+		std::unique_ptr<INode<F>> lhs;
+		std::unique_ptr<INode<F>> rhs;
+	public:
+		template <typename P>
+		BinaryNode(const P& p, std::unique_ptr<INode<F>>&& l, std::unique_ptr<INode<F>>&& r) : payload(p), lhs(std::move(l)), rhs(std::move(r)) {}
+		virtual void visit(IVisitor<F>* visitor) {
+			visitor->visitDown(this, payload);
+			lhs->visit(visitor);
+			rhs->visit(visitor);
+			visitor->visitUp(this, payload);
 		}
 	};
+	export template <typename F>
+	class UnaryNode : public INode<F> {
+	protected:
+		unaryOpVariant<F> payload;
+		std::unique_ptr<INode<F>> child;
+	public:
+		template <typename P>
+		UnaryNode(const P& p, std::unique_ptr<INode<F>>&& c) : payload(p), child(std::move(c)) {}
+		virtual void visit(IVisitor<F>* visitor) {
+			visitor->visitDown(this, payload);
+			child->visit(visitor);
+			visitor->visitUp(this, payload);
+		}
+	};
+	export template <typename F>
+	class DomainNode: public INode<F> {
+	protected:
+		domainOpVariant<F> payload;
+		std::unique_ptr<INode<F>> child;
+	public:
+		template <typename P>
+		DomainNode(const P& p, std::unique_ptr<INode<F>>&& c) : payload(p), child(std::move(c)) {}
+		virtual void visit(IVisitor<F>* visitor) {
+			visitor->visitDown(this, payload);
+			child->visit(visitor);
+			visitor->visitUp(this, payload);
+		}
+	};
+	export template <typename F>
+	class LeafNode : public INode<F> {
+	protected:
+		shapeVariant<F> payload;
+	public:
+		template <typename P>
+		LeafNode(const P& p) : payload(p) {}
+		virtual void visit(IVisitor<F>* visitor) {
+			visitor->visitLeaf(this, payload);
+		}
+	};
+
+	export template <typename F>
+	class IVisitor {
+	public:
+		virtual void visitUp(BinaryNode<F>* node, binOpVariant<F>& payload) = 0;
+		virtual void visitUp(UnaryNode<F>* node, unaryOpVariant<F>& payload) = 0;
+		virtual void visitUp(DomainNode<F>* node, domainOpVariant<F>& payload) = 0;
+
+		virtual void visitDown(BinaryNode<F>* node, binOpVariant<F>& payload) = 0;
+		virtual void visitDown(UnaryNode<F>* node, unaryOpVariant<F>& payload) = 0;
+		virtual void visitDown(DomainNode<F>* node, domainOpVariant<F>& payload) = 0;
+
+		virtual void visitLeaf(LeafNode<F>* node, shapeVariant<F>& payload) = 0;
+	};
+	
+	export template <typename F>
+	inline auto Union(std::unique_ptr<INode<F>>&& lhs, std::unique_ptr<INode<F>>&& rhs) {
+		return std::make_unique<BinaryNode<F>>(union_sdf<F>(), std::move(lhs), std::move(rhs));
+	}
+	export template <typename F>
+	inline auto Union(F radius, std::unique_ptr<INode<F>>&& lhs, std::unique_ptr<INode<F>>&& rhs) {
+		return std::make_unique<BinaryNode<F>>(smoothUnion<F>(radius), std::move(lhs), std::move(rhs));
+	}
+	export template <typename F>
+	inline auto Intersect(std::unique_ptr<INode<F>>&& lhs, std::unique_ptr<INode<F>>&& rhs) {
+		return std::make_unique<BinaryNode<F>>(intersect<F>(), std::move(lhs), std::move(rhs));
+	}
+	export template <typename F>
+	inline auto Intersect(F radius, std::unique_ptr<INode<F>>&& lhs, std::unique_ptr<INode<F>>&& rhs) {
+		return std::make_unique<BinaryNode<F>>(smoothIntersect<F>(radius), std::move(lhs), std::move(rhs));
+	}
+	export template <typename F>
+	inline auto Subtract(std::unique_ptr<INode<F>>&& lhs, std::unique_ptr<INode<F>>&& rhs) {
+		return std::make_unique<BinaryNode<F>>(subtract<F>(), std::move(lhs), std::move(rhs));
+	}
+	export template <typename F>
+	inline auto Subtract(F radius, std::unique_ptr<INode<F>>&& lhs, std::unique_ptr<INode<F>>&& rhs) {
+		return std::make_unique<BinaryNode<F>>(smoothSubtract<F>(radius), std::move(lhs), std::move(rhs));
+	}
+	export template <typename F>
+	inline auto Move(ivec::vec<F, 3> offset, std::unique_ptr<INode<F>>&& subtree) {
+		return std::make_unique<DomainNode<F>>(move<F>(offset), std::move(subtree));
+	}
+	export template <typename F>
+	inline auto Round(F radius, std::unique_ptr<INode<F>>&& subtree) {
+		return std::make_unique<UnaryNode<F>>(round<F>(radius), std::move(subtree));
+	}
+	export template <typename F>
+	inline auto Box(ivec::vec<F, 3> dim) {
+		return std::make_unique<LeafNode<F>>(box<F>(dim));
+	}
+	export template <typename F>
+	inline auto Cone(F radius, F height) {
+		return std::make_unique<LeafNode<F>>(cone<F>(radius, height));
+	}
+	export template <typename F>
+	inline auto Torus(F radius, F thickness) {
+		return std::make_unique<LeafNode<F>>(torus<F>(radius, thickness));
+	}
+	export template <typename F>
+	inline auto Sphere(F radius) {
+		return std::make_unique<LeafNode<F>>(sphere<F>(radius));
+	}
+	export template <typename F>
+	inline auto Cylinder(F radius, F height) {
+		return std::make_unique<LeafNode<F>>(cylinder<F>(radius, height));
+	}
+	export template <typename F>
+	inline auto HexPrism(F radius, F height) {
+		return std::make_unique<LeafNode<F>>(hexPrism<F>(radius, height));
+	}
+	export template <typename F>
+	inline auto Capsule(ivec::vec<F, 3> a, ivec::vec<F, 3> b) {
+		return std::make_unique<LeafNode<F>>(capsule<F>(a, b));
+	}
 };

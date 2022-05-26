@@ -45,16 +45,16 @@ export namespace SDF {
 			F h = max(k - abs(d1 - d2), 0.0);
 			return max(d1, d2) + h * (h * 0.25 / k);
 		}
-		decl_uiName(intersect, "intersect");
-		decl_uiName(smoothIntersect, "smooth intersect");
+		decl_uiName(intersect, "intersect")
+		decl_uiName(smoothIntersect, "smooth intersect")
 		
 		decl_glslInterface(intersect,sName, sDef,fnName,fnDef)
 		decl_glslInterface(smoothIntersect, ssName, ssDef, sfnName, sfnDef)
-		export template <typename F>
+		template <typename F>
 		std::string glslLiteral(const intersect<F>& self) {
 			return std::string("");
 		}
-		export template <typename F>
+		template <typename F>
 		std::string glslLiteral(const smoothIntersect<F>& self) {
 			return print(self.radius);
 		}

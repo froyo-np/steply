@@ -47,9 +47,9 @@ export namespace SDF {
 
 		return min(max(d.x(), d.y()), 0.0f) + vec2::Max(d, vec2(0, 0)).length();
 	}
-	decl_uiName(hexPrism, UI_NAME);
+	decl_uiName(hexPrism, UI_NAME)
 	decl_glslInterface(hexPrism, sName,sDef, fnName, fnDef)
-	export template <typename F>
+	template <typename F>
 	std::string glslLiteral(const hexPrism<F>& self) {
 		return std::string(sName) + "(" + print(self.radius) + ", " + print(self.height) + ")";
 	}

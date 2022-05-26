@@ -25,9 +25,9 @@ export namespace SDF {
 		inline F distanceTo(const sphere<F>& self, const vec<F, 3>& p) {
 			return p.length() - self.radius;
 		}
-		decl_uiName(sphere, UI_NAME);
+		decl_uiName(sphere, UI_NAME)
 		decl_glslInterface(sphere,sName,sDef,fnName,fnDef)
-		export template <typename F>
+		template <typename F>
 		std::string glslLiteral(const sphere<F>& self) {
 			return print(self.radius);
 		}

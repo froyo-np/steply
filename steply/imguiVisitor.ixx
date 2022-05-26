@@ -3,11 +3,10 @@ module;
 #include <imgui.h>
 export module imguiVisitor;
 import imvec;
-import sdfNode;
-import sdflib;
 
 namespace SDF {
-	
+
+	/**
 	template <typename F, unsigned short N>
 	using vec = ivec::vec<F,N>;
 	template <typename F>
@@ -457,4 +456,5 @@ namespace SDF {
 		return std::visit(
 			[](auto& arg) {return guiVisit<F, GroupType>(arg); }, node);
 	}
+	*/
 };

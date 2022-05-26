@@ -35,9 +35,9 @@ export namespace SDF {
 		F t = max(0, min(1, pa.dot(ab) / ab.dot(ab)));
 		return (((ab * t) + self.a) - p).length() - self.radius;
 	}
-	decl_uiName(capsule, UI_NAME);
+	decl_uiName(capsule, UI_NAME)
 	decl_glslInterface(capsule, SNAME, SDEF, FNAME, FNDEF)
-	export template <typename F>
+	template <typename F>
 	std::string glslLiteral(const capsule<F>& self) {
 		return std::string(SNAME) + "(" + vecLiteral<F, 3>(self.a) +", "+vecLiteral<F,3>(self.b)+", "+print(self.radius) +")";
 	}

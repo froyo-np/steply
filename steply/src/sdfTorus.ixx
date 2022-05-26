@@ -33,9 +33,9 @@ export namespace SDF {
 			vec<F, 2> s(x, p.y());
 			return s.length() - self.thickness;
 		}
-		decl_uiName(torus, UI_NAME);
+		decl_uiName(torus, UI_NAME)
 		decl_glslInterface(torus, sName, sDef, fnName, fnDef)
-		export template <typename F>
+		template <typename F>
 		std::string glslLiteral(const torus<F>& self) {
 			return std::string(sName) + "(" + print(self.radius) + ", " + print(self.thickness) + ")";
 		}

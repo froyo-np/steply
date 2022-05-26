@@ -31,9 +31,9 @@ export namespace SDF {
 		F d = p.xz().length() - self.radius;
 		return max(d, p.abs().y() - self.height);
 	}
-	decl_uiName(cylinder, UI_NAME);
+	decl_uiName(cylinder, UI_NAME)
 	decl_glslInterface(cylinder, sName, sDef, fnName, fnDef)
-	export template <typename F>
+	template <typename F>
 	std::string glslLiteral(const cylinder<F>& self) {
 		return std::string(sName) + "(" + print(self.radius) + ", " + print(self.height) + ")";
 	}

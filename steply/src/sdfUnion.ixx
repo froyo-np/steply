@@ -43,16 +43,16 @@ export namespace SDF {
 		ivec::vec<F, 2> u = ivec::vec<F, 2>(max(0, r - a), max(0, r - b));
 		return max(r, min(a, b)) - u.length();
 	}
-	decl_uiName(union_sdf, "union");
-	decl_uiName(smoothUnion, "smooth union");
+	decl_uiName(union_sdf, "union")
+	decl_uiName(smoothUnion, "smooth union")
 	decl_glslInterface(union_sdf, sName, sDef, fnName, fnDef)
 	decl_glslInterface(smoothUnion, rsName, rsDef, rfnName, rfnDef)
 	
-	export template <typename F>
+	template <typename F>
 	std::string glslLiteral(const union_sdf<F>& self) {
 		return std::string("");
 	}
-	export template <typename F>
+	template <typename F>
 	std::string glslLiteral(const smoothUnion<F>& self) {
 		return print(self.radius);
 	}
